@@ -1,3 +1,567 @@
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 14:46:24*
+
+**[REMOVED]**
+```
+(from line ~2)
+import 'package:firebase_auth/firebase_auth.dart';
+
+```
+**[ADDED]**
+```
+2     import 'package:flutter_bloc/flutter_bloc.dart';
+```
+**[ADDED]**
+```
+4     import 'bloc/auth/auth_bloc.dart';
+5     import 'bloc/auth/auth_event.dart';
+6     import 'bloc/auth/auth_state.dart';
+7     import 'bloc/user/user_bloc.dart';
+8     import 'bloc/user/user_state.dart';
+```
+**[REMOVED]**
+```
+(from line ~18)
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String _getUserName() {
+    final user = _auth.currentUser;
+    if (user != null && user.displayName != null && user.displayName!.isNotEmpty) {
+      return user.displayName!;
+    }
+    return user?.email?.split('@')[0] ?? 'Usuario';
+  }
+
+
+```
+**[REMOVED]**
+```
+(from line ~249)
+              onPressed: () async {
+
+```
+**[ADDED]**
+```
+249                 onPressed: () {
+```
+**[REMOVED]**
+```
+(from line ~251)
+                await _auth.signOut();
+                if (mounted) {
+                  Navigator.pushReplacementNamed(context, Routes.login);
+                }
+
+```
+**[ADDED]**
+```
+251                   context.read<AuthBloc>().add(const AuthLogoutRequested());
+```
+**[REMOVED]**
+```
+(from line ~283)
+      style: TextStyle(
+        fontSize: 15,
+        color: Colors.grey[700],
+        height: 1.5,
+      ),
+
+```
+**[ADDED]**
+```
+283         style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.5),
+```
+**[REMOVED]**
+```
+(from line ~289)
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        title: const Text(
+          'Configuración',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+
+```
+**[ADDED]**
+```
+289       return BlocListener<AuthBloc, AuthState>(
+290         listener: (context, state) {
+291           if (state is AuthUnauthenticated) {
+292             Navigator.pushReplacementNamed(context, Routes.login);
+293           }
+294         },
+295         child: Scaffold(
+296           backgroundColor: Colors.grey[50],
+297           appBar: AppBar(
+298             title: const Text(
+299               'Configuración',
+300               style: TextStyle(
+301                 color: Colors.black,
+302                 fontSize: 24,
+303                 fontWeight: FontWeight.bold,
+304               ),
+```
+**[ADDED]**
+```
+306             backgroundColor: Colors.white,
+307             elevation: 0,
+308             automaticallyImplyLeading: false,
+```
+**[REMOVED]**
+```
+(from line ~310)
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Header con avatar y nombre
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: const Color(0xFF6366F1),
+                    child: const Icon(
+                      Icons.person,
+                      size: 35,
+                      color: Color(0xFF6366F1),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _getUserName(),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1A1A1A),
+                        ),
+
+```
+**[ADDED]**
+```
+310           body: SingleChildScrollView(
+311             child: Column(
+312               children: [
+313                 // Header con avatar y nombre
+314                 Container(
+315                   color: Colors.white,
+316                   padding: const EdgeInsets.all(20),
+317                   child: Row(
+318                     children: [
+319                       CircleAvatar(
+320                         radius: 30,
+321                         backgroundColor: const Color(0xFF6366F1),
+322                         child: const Icon(
+323                           Icons.person,
+324                           size: 35,
+325                           color: Color(0xFF6366F1),
+```
+**[REMOVED]**
+```
+(from line ~327)
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Perfil',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+
+```
+**[ADDED]**
+```
+327                       ),
+328                       const SizedBox(width: 16),
+329                       BlocBuilder<UserBloc, UserState>(
+330                         builder: (context, state) {
+331                           String userName = 'Usuario';
+332                           if (state is UserLoaded) {
+333                             userName = state.user.nombre;
+334                           }
+335   
+336                           return Column(
+337                             crossAxisAlignment: CrossAxisAlignment.start,
+338                             children: [
+339                               Text(
+340                                 userName,
+341                                 style: const TextStyle(
+342                                   fontSize: 18,
+343                                   fontWeight: FontWeight.bold,
+344                                   color: Color(0xFF1A1A1A),
+345                                 ),
+346                               ),
+347                               const SizedBox(height: 4),
+348                               const Text(
+349                                 'Perfil',
+350                                 style: TextStyle(
+351                                   fontSize: 14,
+352                                   color: Colors.grey,
+353                                 ),
+354                               ),
+355                             ],
+356                           );
+357                         },
+358                       ),
+359                     ],
+360                   ),
+```
+**[REMOVED]**
+```
+(from line ~362)
+            ),
+            const SizedBox(height: 8),
+
+```
+**[ADDED]**
+```
+362                 const SizedBox(height: 8),
+```
+**[REMOVED]**
+```
+(from line ~364)
+            // Opciones de menú
+            Container(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  _buildMenuItem(
+                    icon: Icons.person_outline,
+                    iconColor: const Color(0xFF6366F1),
+                    iconBgColor: const Color(0xFF6366F1),
+                    title: 'Perfil',
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.profile);
+                    },
+                  ),
+                  const Divider(height: 1, indent: 80),
+                  _buildMenuItem(
+                    icon: Icons.lock_outline,
+                    iconColor: const Color(0xFF8B5CF6),
+                    iconBgColor: const Color(0xFF8B5CF6),
+                    title: 'Privacidad',
+                    onTap: _showPrivacySheet,
+                  ),
+                  const Divider(height: 1, indent: 80),
+                  _buildMenuItem(
+                    icon: Icons.info_outline,
+                    iconColor: const Color(0xFFF59E0B),
+                    iconBgColor: const Color(0xFFF59E0B),
+                    title: 'Acerca de nosotros',
+                    onTap: _showAboutSheet,
+                  ),
+                ],
+
+```
+**[ADDED]**
+```
+364                 // Opciones de menú
+365                 Container(
+366                   color: Colors.white,
+367                   child: Column(
+368                     children: [
+369                       _buildMenuItem(
+370                         icon: Icons.person_outline,
+371                         iconColor: const Color(0xFF6366F1),
+372                         iconBgColor: const Color(0xFF6366F1),
+373                         title: 'Perfil',
+374                         onTap: () {
+375                           Navigator.pushNamed(context, Routes.profile);
+376                         },
+377                       ),
+378                       const Divider(height: 1, indent: 80),
+379                       _buildMenuItem(
+380                         icon: Icons.lock_outline,
+381                         iconColor: const Color(0xFF8B5CF6),
+382                         iconBgColor: const Color(0xFF8B5CF6),
+383                         title: 'Privacidad',
+384                         onTap: _showPrivacySheet,
+385                       ),
+386                       const Divider(height: 1, indent: 80),
+387                       _buildMenuItem(
+388                         icon: Icons.info_outline,
+389                         iconColor: const Color(0xFFF59E0B),
+390                         iconBgColor: const Color(0xFFF59E0B),
+391                         title: 'Acerca de nosotros',
+392                         onTap: _showAboutSheet,
+393                       ),
+394                     ],
+395                   ),
+```
+**[REMOVED]**
+```
+(from line ~397)
+            ),
+            const SizedBox(height: 8),
+
+```
+**[ADDED]**
+```
+397                 const SizedBox(height: 8),
+```
+**[REMOVED]**
+```
+(from line ~399)
+            // Log Out
+            Container(
+              color: Colors.white,
+              child: _buildMenuItem(
+                icon: Icons.logout,
+                iconColor: Colors.red,
+                iconBgColor: Colors.red,
+                title: 'Cerrar Sesión',
+                onTap: _showLogoutDialog,
+                showArrow: false,
+
+```
+**[ADDED]**
+```
+399                 // Log Out
+400                 Container(
+401                   color: Colors.white,
+402                   child: _buildMenuItem(
+403                     icon: Icons.logout,
+404                     iconColor: Colors.red,
+405                     iconBgColor: Colors.red,
+406                     title: 'Cerrar Sesión',
+407                     onTap: _showLogoutDialog,
+408                     showArrow: false,
+409                   ),
+```
+**[ADDED]**
+```
+411               ],
+412             ),
+413           ),
+414           bottomNavigationBar: BottomNavigationBar(
+415             currentIndex: 2, // Settings está en index 2
+416             onTap: (index) {
+417               if (index == 0) {
+418                 Navigator.pushReplacementNamed(context, Routes.home);
+419               } else if (index == 1) {
+420                 Navigator.pushReplacementNamed(context, Routes.messages);
+421               }
+422             },
+423             selectedItemColor: const Color(0xFF6366F1),
+424             unselectedItemColor: Colors.grey,
+425             items: const [
+426               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+427               BottomNavigationBarItem(
+428                 icon: Icon(Icons.message),
+429                 label: 'Mensajes',
+```
+**[ADDED]**
+```
+431               BottomNavigationBarItem(
+432                 icon: Icon(Icons.settings),
+433                 label: 'Configuración',
+434               ),
+```
+**[REMOVED]**
+```
+(from line ~438)
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 2, // Settings está en index 2
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.pushReplacementNamed(context, Routes.home);
+          } else if (index == 1) {
+            Navigator.pushReplacementNamed(context, Routes.messages);
+          }
+        },
+        selectedItemColor: const Color(0xFF6366F1),
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: 'Mensajes',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Configuración',
+          ),
+        ],
+      ),
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\main.dart
+*Saved at: 29/10/2025, 14:38:31*
+
+**[ADDED]**
+```
+3     import 'package:flutter_bloc/flutter_bloc.dart';
+4     import 'bloc/auth/auth_event.dart';
+```
+**[REMOVED]**
+```
+(from line ~6)
+import 'routes.dart'; // Importa todas las rutas
+
+```
+**[ADDED]**
+```
+6     import 'routes.dart';
+7     // Importar BLoCs
+8     import 'bloc/auth/auth_bloc.dart';
+9     import 'bloc/user/user_bloc.dart';
+10    import 'bloc/appointment/appointment_bloc.dart';
+11    // Importar Repositorios
+12    import 'repositories/auth_repository.dart';
+13    import 'repositories/user_repository.dart';
+14    import 'repositories/appointment_repository.dart';
+```
+**[REMOVED]**
+```
+(from line ~27)
+    return MaterialApp(
+      title: 'Doctor Appointment App',
+      initialRoute: Routes.login, // Ruta inicial
+      onGenerateRoute: Routes.generateRoute, // Generador de rutas
+      debugShowCheckedModeBanner: false,
+
+```
+**[ADDED]**
+```
+27        // Crear instancias de los repositorios
+28        final authRepository = AuthRepository();
+29        final userRepository = UserRepository();
+30        final appointmentRepository = AppointmentRepository();
+31    
+32        return MultiBlocProvider(
+33          providers: [
+34            // Proveedor del AuthBloc
+35            BlocProvider<AuthBloc>(
+36              create: (context) => AuthBloc(authRepository: authRepository)
+37                ..add(const AuthCheckRequested()),
+38            ),
+39            // Proveedor del UserBloc
+40            BlocProvider<UserBloc>(
+41              create: (context) => UserBloc(userRepository: userRepository),
+42            ),
+43            // Proveedor del AppointmentBloc
+44            BlocProvider<AppointmentBloc>(
+45              create: (context) => AppointmentBloc(
+46                appointmentRepository: appointmentRepository,
+47              ),
+48            ),
+49          ],
+50          child: MaterialApp(
+51            title: 'Doctor Appointment App',
+52            initialRoute: Routes.login,
+53            onGenerateRoute: Routes.generateRoute,
+54            debugShowCheckedModeBanner: false,
+55          ),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\bloc\auth\auth_state.dart
+*Saved at: 29/10/2025, 14:35:18*
+
+**[REMOVED]**
+```
+(from line ~44)
+}
+
+```
+**[ADDED]**
+```
+44    }
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 14:25:53*
+
+**[REMOVED]**
+```
+(from line ~250)
+                                Routes.editA
+                                
+                              ppointment,
+
+```
+**[ADDED]**
+```
+250                                   Routes.editAppointment,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 14:25:49*
+
+**[REMOVED]**
+```
+(from line ~252)
+                                
+                            ppointment,
+
+```
+**[ADDED]**
+```
+252                                 ppointment,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 14:25:46*
+
+**[REMOVED]**
+```
+(from line ~251)
+                                ppointment,
+
+```
+**[ADDED]**
+```
+251                                   
+252                                   
+253                               ppointment,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 14:25:43*
+
+**[REMOVED]**
+```
+(from line ~250)
+                                Routes.editAppointment,
+
+```
+**[ADDED]**
+```
+250                                   Routes.editA
+251                                   ppointment,
+```
+
+---
+
 ### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\edit_appointment_page.dart
 *Saved at: 29/10/2025, 14:18:28*
 

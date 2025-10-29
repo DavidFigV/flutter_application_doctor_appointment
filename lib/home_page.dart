@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'routes.dart';
+import 'bloc/auth/auth_bloc.dart';
+import 'bloc/auth/auth_state.dart';
+import 'bloc/user/user_bloc.dart';
+import 'bloc/user/user_event.dart';
+import 'bloc/user/user_state.dart';
+import 'bloc/appointment/appointment_bloc.dart';
+import 'bloc/appointment/appointment_event.dart';
+import 'bloc/appointment/appointment_state.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,50 +19,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   int _selectedIndex = 0;
-  String _userName = 'Usuario';
 
   @override
   void initState() {
     super.initState();
-    _loadUserName();
+    _loadData();
   }
 
-  Future<void> _loadUserName() async {
-    final user = _auth.currentUser;
-    if (user == null) return;
-
-    try {
-      final userDoc = await _firestore.collection('usuarios').doc(user.uid).get();
-      if (userDoc.exists && mounted) {
-        final userData = userDoc.data();
-        setState(() {
-          _userName = userData?['nombre'] ?? user.email?.split('@')[0] ?? 'Usuario';
-        });
-      }
-    } catch (e) {
-      // Si hay error, usar el email como fallback
-      if (mounted) {
-        setState(() {
-          _userName = user.email?.split('@')[0] ?? 'Usuario';
-        });
-      }
+  void _loadData() {
+    final authState = context.read<AuthBloc>().state;
+    if (authState is AuthAuthenticated) {
+      // Cargar datos del usuario
+      context.read<UserBloc>().add(UserLoadRequested(authState.user.uid));
+      // Cargar citas del usuario
+      context.read<AppointmentBloc>().add(AppointmentLoadRequested(authState.user.uid));
     }
-  }
-
-  Stream<QuerySnapshot> _getCitasStream() {
-    final user = _auth.currentUser;
-    if (user == null) {
-      return const Stream.empty();
-    }
-
-    return _firestore
-        .collection('citas')
-        .where('id_paciente', isEqualTo: user.uid)
-        .limit(3)
-        .snapshots();
   }
 
   String _formatearFecha(Timestamp timestamp) {
@@ -92,46 +72,55 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header con saludo y avatar
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '¡Hola, $_userName!',
+                BlocBuilder<UserBloc, UserState>(
+                  builder: (context, state) {
+                    String userName = 'Usuario';
+                    if (state is UserLoaded) {
+                      userName = state.user.nombre;
+                    }
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '¡Hola, $userName!',
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '¿En qué podemos ayudarte?',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Avatar del usuario
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: const Color(0xFF6366F1),
+                          child: Text(
+                            userName[0].toUpperCase(),
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF1A1A1A),
+                              color: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '¿En qué podemos ayudarte?',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Avatar del usuario
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: const Color(0xFF6366F1),
-                      child: Text(
-                        _userName[0].toUpperCase(),
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
                         ),
-                      ),
-                    ),
-                  ],
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 30),
 
@@ -332,11 +321,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 16),
 
-                // Lista de citas desde Firestore
-                StreamBuilder<QuerySnapshot>(
-                  stream: _getCitasStream(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                // Lista de citas desde BLoC
+                BlocBuilder<AppointmentBloc, AppointmentState>(
+                  builder: (context, state) {
+                    if (state is AppointmentLoading) {
                       return const Center(
                         child: Padding(
                           padding: EdgeInsets.all(20.0),
@@ -347,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
 
-                    if (snapshot.hasError) {
+                    if (state is AppointmentError) {
                       return Center(
                         child: Text(
                           'Error al cargar citas',
@@ -356,64 +344,93 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
 
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey[300]!),
-                        ),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.calendar_today_outlined,
-                              size: 48,
-                              color: Colors.grey[400],
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              'No tienes citas agendadas',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[600],
-                                fontWeight: FontWeight.w500,
+                    if (state is AppointmentsLoaded) {
+                      if (state.appointments.isEmpty) {
+                        return Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.grey[300]!),
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.calendar_today_outlined,
+                                size: 48,
+                                color: Colors.grey[400],
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Agenda tu primera cita para comenzar',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[500],
+                              const SizedBox(height: 12),
+                              Text(
+                                'No tienes citas agendadas',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Agenda tu primera cita para comenzar',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      // Mostrar solo las primeras 3 citas
+                      final citasLimitadas = state.appointments.take(3).toList();
+
+                      return Column(
+                        children: citasLimitadas.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final cita = entry.value;
+
+                          return Column(
+                            children: [
+                              _buildAppointmentCard(
+                                cita.nombreDoctor,
+                                cita.especialidadDoctor,
+                                _formatearFecha(Timestamp.fromDate(cita.fecha)),
+                                cita.hora,
+                              ),
+                              if (index < citasLimitadas.length - 1)
+                                const SizedBox(height: 12),
+                            ],
+                          );
+                        }).toList(),
                       );
                     }
 
-                    final citas = snapshot.data!.docs;
-
-                    return Column(
-                      children: citas.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final citaDoc = entry.value;
-                        final cita = citaDoc.data() as Map<String, dynamic>;
-
-                        return Column(
-                          children: [
-                            _buildAppointmentCard(
-                              cita['nombre_doctor'] ?? 'Doctor',
-                              cita['especialidad_doctor'] ?? 'Especialidad',
-                              _formatearFecha(cita['fecha'] as Timestamp),
-                              cita['hora'] ?? '',
+                    return Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            size: 48,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'No tienes citas agendadas',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
                             ),
-                            if (index < citas.length - 1)
-                              const SizedBox(height: 12),
-                          ],
-                        );
-                      }).toList(),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),

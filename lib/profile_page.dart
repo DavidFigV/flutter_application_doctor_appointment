@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/auth/auth_bloc.dart';
+import 'bloc/auth/auth_state.dart';
+import 'bloc/user/user_bloc.dart';
+import 'bloc/user/user_event.dart';
+import 'bloc/user/user_state.dart';
+import 'models/user_model.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,8 +15,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
 
   // Controladores de los campos del formulario
@@ -21,7 +24,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController telefonoController = TextEditingController();
   final TextEditingController enfermedadesController = TextEditingController();
 
-  bool _isLoading = false;
+  String? _userUid;
+  String? _userEmail;
 
   @override
   void initState() {
@@ -29,100 +33,90 @@ class _ProfilePageState extends State<ProfilePage> {
     _loadUserData();
   }
 
-  // Cargar datos del usuario desde Firestore
-  Future<void> _loadUserData() async {
-    setState(() => _isLoading = true);
-
-    final user = _auth.currentUser;
-    if (user == null) return;
-
-    try {
-      final doc = await _firestore.collection('usuarios').doc(user.uid).get();
-      if (doc.exists) {
-        final data = doc.data()!;
-        nombreController.text = data['nombre'] ?? '';
-        edadController.text = data['edad'] ?? '';
-        lugarNacimientoController.text = data['lugar_nacimiento'] ?? '';
-        telefonoController.text = data['telefono'] ?? '';
-        enfermedadesController.text = data['enfermedades'] ?? '';
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar datos: $e')),
-        );
-      }
-    } finally {
-      setState(() => _isLoading = false);
+  void _loadUserData() {
+    final authState = context.read<AuthBloc>().state;
+    if (authState is AuthAuthenticated) {
+      _userUid = authState.user.uid;
+      _userEmail = authState.user.email;
+      context.read<UserBloc>().add(UserLoadRequested(authState.user.uid));
     }
   }
 
-  // Guardar datos del usuario en Firestore
-  Future<void> _saveUserData() async {
+  void _saveUserData() {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    final user = _auth.currentUser;
-    if (user == null) return;
+    if (_userUid == null || _userEmail == null) return;
 
-    setState(() => _isLoading = true);
+    final user = UserModel(
+      uid: _userUid!,
+      email: _userEmail!,
+      nombre: nombreController.text.trim(),
+      edad: edadController.text.trim().isEmpty ? null : edadController.text.trim(),
+      lugarNacimiento: lugarNacimientoController.text.trim().isEmpty
+          ? null
+          : lugarNacimientoController.text.trim(),
+      telefono: telefonoController.text.trim().isEmpty
+          ? null
+          : telefonoController.text.trim(),
+      enfermedades: enfermedadesController.text.trim().isEmpty
+          ? null
+          : enfermedadesController.text.trim(),
+    );
 
-    try {
-      await _firestore.collection('usuarios').doc(user.uid).set({
-        'nombre': nombreController.text.trim(),
-        'edad': edadController.text.trim(),
-        'lugar_nacimiento': lugarNacimientoController.text.trim(),
-        'telefono': telefonoController.text.trim(),
-        'enfermedades': enfermedadesController.text.trim(),
-        'email': user.email,
-        'uid': user.uid,
-      });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Información guardada exitosamente'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al guardar: $e')),
-        );
-      }
-    } finally {
-      setState(() => _isLoading = false);
-    }
+    context.read<UserBloc>().add(UserUpdateRequested(user));
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = _auth.currentUser;
-
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text(
-          'Mi Perfil',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+    return BlocListener<UserBloc, UserState>(
+      listener: (context, state) {
+        if (state is UserOperationSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else if (state is UserError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        } else if (state is UserLoaded) {
+          // Actualizar los controladores cuando se carguen los datos
+          nombreController.text = state.user.nombre;
+          edadController.text = state.user.edad ?? '';
+          lugarNacimientoController.text = state.user.lugarNacimiento ?? '';
+          telefonoController.text = state.user.telefono ?? '';
+          enfermedadesController.text = state.user.enfermedades ?? '';
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey[50],
+        appBar: AppBar(
+          title: const Text(
+            'Mi Perfil',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          backgroundColor: const Color(0xFF6366F1),
+          foregroundColor: Colors.white,
+          elevation: 0,
         ),
-        backgroundColor: const Color(0xFF6366F1),
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFF6366F1),
-              ),
-            )
-          : SingleChildScrollView(
+        body: BlocBuilder<UserBloc, UserState>(
+          builder: (context, state) {
+            final isLoading = state is UserLoading;
+
+            return isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF6366F1),
+                    ),
+                  )
+                : SingleChildScrollView(
               child: Column(
                 children: [
                   // Header con avatar
@@ -168,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          user?.email ?? 'No disponible',
+                          _userEmail ?? 'No disponible',
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.white70,
@@ -404,7 +398,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-            ),
+                  );
+          },
+        ),
+      ),
     );
   }
 

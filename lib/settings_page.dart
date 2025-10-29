@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'routes.dart';
+import 'bloc/auth/auth_bloc.dart';
+import 'bloc/auth/auth_event.dart';
+import 'bloc/auth/auth_state.dart';
+import 'bloc/user/user_bloc.dart';
+import 'bloc/user/user_state.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -10,16 +15,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  String _getUserName() {
-    final user = _auth.currentUser;
-    if (user != null && user.displayName != null && user.displayName!.isNotEmpty) {
-      return user.displayName!;
-    }
-    return user?.email?.split('@')[0] ?? 'Usuario';
-  }
-
   void _showPrivacySheet() {
     showModalBottomSheet(
       context: context,
@@ -251,12 +246,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 Navigator.pop(context); // Cerrar diálogo
-                await _auth.signOut();
-                if (mounted) {
-                  Navigator.pushReplacementNamed(context, Routes.login);
-                }
+                context.read<AuthBloc>().add(const AuthLogoutRequested());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -288,151 +280,160 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildParagraph(String text) {
     return Text(
       text,
-      style: TextStyle(
-        fontSize: 15,
-        color: Colors.grey[700],
-        height: 1.5,
-      ),
+      style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.5),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text(
-          'Configuración',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUnauthenticated) {
+          Navigator.pushReplacementNamed(context, Routes.login);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey[50],
+        appBar: AppBar(
+          title: const Text(
+            'Configuración',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Header con avatar y nombre
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: const Color(0xFF6366F1),
+                      child: const Icon(
+                        Icons.person,
+                        size: 35,
+                        color: Color(0xFF6366F1),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        String userName = 'Usuario';
+                        if (state is UserLoaded) {
+                          userName = state.user.nombre;
+                        }
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              userName,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1A1A1A),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Perfil',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Opciones de menú
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    _buildMenuItem(
+                      icon: Icons.person_outline,
+                      iconColor: const Color(0xFF6366F1),
+                      iconBgColor: const Color(0xFF6366F1),
+                      title: 'Perfil',
+                      onTap: () {
+                        Navigator.pushNamed(context, Routes.profile);
+                      },
+                    ),
+                    const Divider(height: 1, indent: 80),
+                    _buildMenuItem(
+                      icon: Icons.lock_outline,
+                      iconColor: const Color(0xFF8B5CF6),
+                      iconBgColor: const Color(0xFF8B5CF6),
+                      title: 'Privacidad',
+                      onTap: _showPrivacySheet,
+                    ),
+                    const Divider(height: 1, indent: 80),
+                    _buildMenuItem(
+                      icon: Icons.info_outline,
+                      iconColor: const Color(0xFFF59E0B),
+                      iconBgColor: const Color(0xFFF59E0B),
+                      title: 'Acerca de nosotros',
+                      onTap: _showAboutSheet,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Log Out
+              Container(
+                color: Colors.white,
+                child: _buildMenuItem(
+                  icon: Icons.logout,
+                  iconColor: Colors.red,
+                  iconBgColor: Colors.red,
+                  title: 'Cerrar Sesión',
+                  onTap: _showLogoutDialog,
+                  showArrow: false,
+                ),
+              ),
+            ],
           ),
         ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header con avatar y nombre
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: const Color(0xFF6366F1),
-                    child: const Icon(
-                      Icons.person,
-                      size: 35,
-                      color: Color(0xFF6366F1),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _getUserName(),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Perfil',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 2, // Settings está en index 2
+          onTap: (index) {
+            if (index == 0) {
+              Navigator.pushReplacementNamed(context, Routes.home);
+            } else if (index == 1) {
+              Navigator.pushReplacementNamed(context, Routes.messages);
+            }
+          },
+          selectedItemColor: const Color(0xFF6366F1),
+          unselectedItemColor: Colors.grey,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              label: 'Mensajes',
             ),
-            const SizedBox(height: 8),
-
-            // Opciones de menú
-            Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  _buildMenuItem(
-                    icon: Icons.person_outline,
-                    iconColor: const Color(0xFF6366F1),
-                    iconBgColor: const Color(0xFF6366F1),
-                    title: 'Perfil',
-                    onTap: () {
-                      Navigator.pushNamed(context, Routes.profile);
-                    },
-                  ),
-                  const Divider(height: 1, indent: 80),
-                  _buildMenuItem(
-                    icon: Icons.lock_outline,
-                    iconColor: const Color(0xFF8B5CF6),
-                    iconBgColor: const Color(0xFF8B5CF6),
-                    title: 'Privacidad',
-                    onTap: _showPrivacySheet,
-                  ),
-                  const Divider(height: 1, indent: 80),
-                  _buildMenuItem(
-                    icon: Icons.info_outline,
-                    iconColor: const Color(0xFFF59E0B),
-                    iconBgColor: const Color(0xFFF59E0B),
-                    title: 'Acerca de nosotros',
-                    onTap: _showAboutSheet,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            // Log Out
-            Container(
-              color: Colors.white,
-              child: _buildMenuItem(
-                icon: Icons.logout,
-                iconColor: Colors.red,
-                iconBgColor: Colors.red,
-                title: 'Cerrar Sesión',
-                onTap: _showLogoutDialog,
-                showArrow: false,
-              ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Configuración',
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2, // Settings está en index 2
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, Routes.home);
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, Routes.messages);
-          }
-        },
-        selectedItemColor: const Color(0xFF6366F1),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Mensajes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Configuración',
-          ),
-        ],
       ),
     );
   }
