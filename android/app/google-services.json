@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "238501881335",
+    "project_id": "doctorappointmentapp-ce9c8",
+    "storage_bucket": "doctorappointmentapp-ce9c8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238501881335:android:c9575d38610a27720ebaf2",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_doctor_appointment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNkj-C7ztvWBf60qi2s7XIyIeDtJBh2qA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
