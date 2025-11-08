@@ -1,3 +1,2326 @@
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
+*Saved at: 8/11/2025, 0:06:50*
+
+**[REMOVED]**
+```
+(from line ~157)
+                    color: Colors.red.withOpacity(0.1),
+
+```
+**[ADDED]**
+```
+157                       color: Colors.red,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
+*Saved at: 8/11/2025, 0:06:45*
+
+**[REMOVED]**
+```
+(from line ~140)
+                    color: Colors.green.withOpacity(0.1),
+
+```
+**[ADDED]**
+```
+140                       color: Colors.green,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
+*Saved at: 8/11/2025, 0:04:39*
+
+**[REMOVED]**
+```
+(from line ~123)
+                    color: Colors.blue(0.1),
+
+```
+**[ADDED]**
+```
+123                       color: Colors.blue,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
+*Saved at: 8/11/2025, 0:04:37*
+
+**[REMOVED]**
+```
+(from line ~123)
+                    color: Colors.blue.(0.1),
+
+```
+**[ADDED]**
+```
+123                       color: Colors.blue(0.1),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
+*Saved at: 8/11/2025, 0:04:35*
+
+**[REMOVED]**
+```
+(from line ~123)
+                    color: Colors.blue.withOpacity(0.1),
+
+```
+**[ADDED]**
+```
+123                       color: Colors.blue.(0.1),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:22:18*
+
+**[REMOVED]**
+```
+(from line ~143)
+              //
+
+```
+**[ADDED]**
+```
+143                 // CupertinoButton: Botón de cierre estilo iOS
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:22:17*
+
+**[ADDED]**
+```
+143                 //
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:20:45*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(...), // Contenido del modal
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(
+79                  // DefaultTextStyle: Evita subrayados amarillos en Flutter Web
+80                  child: DefaultTextStyle(
+81                    style: const TextStyle(
+82                      fontFamily: '.SF Pro Text', // Fuente del sistema iOS
+83                      color: CupertinoColors.black,
+84                      fontSize: 15,
+85                      decoration: TextDecoration.none,
+86                    ),
+87                    child: SingleChildScrollView(
+88                      padding: const EdgeInsets.all(24),
+89                      child: Column(
+90                        crossAxisAlignment: CrossAxisAlignment.start,
+91                        children: [
+92                          _buildSectionTitle('Política de Privacidad'),
+93                          const SizedBox(height: 8),
+94                          _buildParagraph(
+95                            'En nuestra aplicación de citas médicas, nos comprometemos a proteger tu privacidad y datos personales. Esta política describe cómo recopilamos, usamos y protegemos tu información.',
+96                          ),
+97                          const SizedBox(height: 16),
+98                          _buildSectionTitle('Recopilación de Datos'),
+99                          const SizedBox(height: 8),
+100                         _buildParagraph(
+101                           'Recopilamos información personal como nombre, correo electrónico, número de teléfono y datos médicos relevantes únicamente para proporcionar nuestros servicios de manera efectiva.',
+102                         ),
+103                         const SizedBox(height: 16),
+104                         _buildSectionTitle('Uso de la Información'),
+105                         const SizedBox(height: 8),
+106                         _buildParagraph(
+107                           'Utilizamos tu información para:\n• Gestionar tus citas médicas\n• Comunicarnos contigo sobre tus consultas\n• Mejorar nuestros servicios\n• Cumplir con requisitos legales',
+108                         ),
+109                         const SizedBox(height: 16),
+110                         _buildSectionTitle('Seguridad'),
+111                         const SizedBox(height: 8),
+112                         _buildParagraph(
+113                           'Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos contra acceso no autorizado, pérdida o alteración.',
+114                         ),
+115                         const SizedBox(height: 16),
+116                         _buildSectionTitle('Tus Derechos'),
+117                         const SizedBox(height: 8),
+118                         _buildParagraph(
+119                           'Tienes derecho a acceder, corregir o eliminar tu información personal en cualquier momento. Contacta con nuestro equipo de soporte para ejercer estos derechos.',
+120                         ),
+121                         const SizedBox(height: 32),
+122                       ],
+123                     ),
+124                   ),
+125                 ),
+126               ),
+```
+**[REMOVED]**
+```
+(from line ~149)
+            child: SafeArea(...), // Contenido del modal
+
+```
+**[ADDED]**
+```
+149               child: SafeArea(
+150                 child: DefaultTextStyle(
+151                   style: const TextStyle(
+152                     fontFamily: '.SF Pro Text',
+153                     color: CupertinoColors.black,
+154                     fontSize: 15,
+155                     decoration: TextDecoration.none,
+156                   ),
+157                   child: SingleChildScrollView(
+158                     padding: const EdgeInsets.all(24),
+159                     child: Column(
+160                       crossAxisAlignment: CrossAxisAlignment.start,
+161                       children: [
+162                         const Center(
+163                           child: Icon(
+164                             Icons.local_hospital,
+165                             size: 80,
+166                             color: Color(0xFF6366F1),
+167                           ),
+168                         ),
+169                         const SizedBox(height: 24),
+170                         _buildSectionTitle('Doctor Appointment App'),
+171                         const SizedBox(height: 8),
+172                         _buildParagraph(
+173                           'Nuestra aplicación facilita la gestión de citas médicas, conectando pacientes con profesionales de la salud de manera rápida y segura.',
+174                         ),
+175                         const SizedBox(height: 16),
+176                         _buildSectionTitle('Nuestra Misión'),
+177                         const SizedBox(height: 8),
+178                         _buildParagraph(
+179                           'Mejorar el acceso a servicios de salud mediante tecnología innovadora, ofreciendo una plataforma intuitiva que simplifica la comunicación entre pacientes y médicos.',
+180                         ),
+181                         const SizedBox(height: 16),
+182                         _buildSectionTitle('Características'),
+183                         const SizedBox(height: 8),
+184                         _buildParagraph(
+185                           '• Agendamiento fácil de citas\n• Especialistas calificados\n• Mensajería con doctores\n• Historial médico seguro\n• Recordatorios de citas',
+186                         ),
+187                         const SizedBox(height: 16),
+188                         _buildSectionTitle('Versión'),
+189                         const SizedBox(height: 8),
+190                         _buildParagraph('1.0.0'),
+191                         const SizedBox(height: 16),
+192                         _buildSectionTitle('Contacto'),
+193                         const SizedBox(height: 8),
+194                         _buildParagraph(
+195                           'Email: support@doctorapp.com\nTeléfono: +52 123 456 7890',
+196                         ),
+197                         const SizedBox(height: 32),
+198                       ],
+199                     ),
+200                   ),
+201                 ),
+202               ),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:19:37*
+
+**[REMOVED]**
+```
+(from line ~101)
+            child: SafeArea(...),
+
+```
+**[ADDED]**
+```
+101               child: SafeArea(...), // Contenido del modal
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:19:33*
+
+**[REMOVED]**
+```
+(from line ~101)
+            child: SafeArea(),
+
+```
+**[ADDED]**
+```
+101               child: SafeArea(...),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:19:26*
+
+**[REMOVED]**
+```
+(from line ~101)
+            child: SafeArea(
+),
+
+```
+**[ADDED]**
+```
+101               child: SafeArea(),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:19:22*
+
+**[REMOVED]**
+```
+(from line ~102)
+,
+
+```
+**[ADDED]**
+```
+102   ),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:19:20*
+
+**[REMOVED]**
+```
+(from line ~101)
+            child: SafeArea),
+
+```
+**[ADDED]**
+```
+101               child: SafeArea(
+102   ,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:19:19*
+
+**[REMOVED]**
+```
+(from line ~101)
+            child: SafeArea(
+            ),
+
+```
+**[ADDED]**
+```
+101               child: SafeArea),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:19:15*
+
+**[REMOVED]**
+```
+(from line ~102)
+              child: DefaultTextStyle(
+                style: const TextStyle(
+                  fontFamily: '.SF Pro Text',
+                  color: CupertinoColors.black,
+                  fontSize: 15,
+                  decoration: TextDecoration.none,
+                ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Center(
+                        child: Icon(
+                          Icons.local_hospital,
+                          size: 80,
+                          color: Color(0xFF6366F1),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      _buildSectionTitle('Doctor Appointment App'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Nuestra aplicación facilita la gestión de citas médicas, conectando pacientes con profesionales de la salud de manera rápida y segura.',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Nuestra Misión'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Mejorar el acceso a servicios de salud mediante tecnología innovadora, ofreciendo una plataforma intuitiva que simplifica la comunicación entre pacientes y médicos.',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Características'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        '• Agendamiento fácil de citas\n• Especialistas calificados\n• Mensajería con doctores\n• Historial médico seguro\n• Recordatorios de citas',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Versión'),
+                      const SizedBox(height: 8),
+                      _buildParagraph('1.0.0'),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Contacto'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Email: support@doctorapp.com\nTeléfono: +52 123 456 7890',
+                      ),
+                      const SizedBox(height: 32),
+                    ],
+                  ),
+                ),
+              ),
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:43*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(...), //
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(...), // Contenido del modal
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:37*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(...),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(...), //
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:33*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(... //),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(...),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:30*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(... // ),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(... //),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:28*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(...),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(... // ),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:12*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(..),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(...),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:11*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(..),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:06*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(_),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:05*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(_),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:18:00*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(    
+            ),
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:17:54*
+
+**[REMOVED]**
+```
+(from line ~78)
+            child: SafeArea(
+              // DefaultTextStyle: Evita subrayados amarillos en Flutter Web
+              
+
+```
+**[ADDED]**
+```
+78                child: SafeArea(    
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:17:47*
+
+**[REMOVED]**
+```
+(from line ~80)
+              child: 
+
+```
+**[ADDED]**
+```
+80                  
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:17:42*
+
+**[REMOVED]**
+```
+(from line ~80)
+              child: DefaultTextStyle(
+                style: const TextStyle(
+                  fontFamily: '.SF Pro Text', // Fuente del sistema iOS
+                  color: CupertinoColors.black,
+                  fontSize: 15,
+                  decoration: TextDecoration.none,
+                ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSectionTitle('Política de Privacidad'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'En nuestra aplicación de citas médicas, nos comprometemos a proteger tu privacidad y datos personales. Esta política describe cómo recopilamos, usamos y protegemos tu información.',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Recopilación de Datos'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Recopilamos información personal como nombre, correo electrónico, número de teléfono y datos médicos relevantes únicamente para proporcionar nuestros servicios de manera efectiva.',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Uso de la Información'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Utilizamos tu información para:\n• Gestionar tus citas médicas\n• Comunicarnos contigo sobre tus consultas\n• Mejorar nuestros servicios\n• Cumplir con requisitos legales',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Seguridad'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos contra acceso no autorizado, pérdida o alteración.',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Tus Derechos'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Tienes derecho a acceder, corregir o eliminar tu información personal en cualquier momento. Contacta con nuestro equipo de soporte para ejercer estos derechos.',
+                      ),
+                      const SizedBox(height: 32),
+                    ],
+                  ),
+                ),
+              ),
+
+```
+**[ADDED]**
+```
+80                  child: 
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:16:01*
+
+**[ADDED]**
+```
+103                         const SizedBox(height: 16),
+104                         _buildSectionTitle('Uso de la Información'),
+105                         const SizedBox(height: 8),
+106                         _buildParagraph(
+107                           'Utilizamos tu información para:\n• Gestionar tus citas médicas\n• Comunicarnos contigo sobre tus consultas\n• Mejorar nuestros servicios\n• Cumplir con requisitos legales',
+108                         ),
+109                         const SizedBox(height: 16),
+110                         _buildSectionTitle('Seguridad'),
+111                         const SizedBox(height: 8),
+112                         _buildParagraph(
+113                           'Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos contra acceso no autorizado, pérdida o alteración.',
+114                         ),
+115                         const SizedBox(height: 16),
+116                         _buildSectionTitle('Tus Derechos'),
+117                         const SizedBox(height: 8),
+118                         _buildParagraph(
+119                           'Tienes derecho a acceder, corregir o eliminar tu información personal en cualquier momento. Contacta con nuestro equipo de soporte para ejercer estos derechos.',
+120                         ),
+121                         const SizedBox(height: 32),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:15:57*
+
+**[REMOVED]**
+```
+(from line ~95)
+                        'En nuestra aplicación de citas...',
+
+```
+**[ADDED]**
+```
+95                            'En nuestra aplicación de citas médicas, nos comprometemos a proteger tu privacidad y datos personales. Esta política describe cómo recopilamos, usamos y protegemos tu información.',
+```
+**[REMOVED]**
+```
+(from line ~98)
+                      ... // Más secciones de privacidad
+
+```
+**[ADDED]**
+```
+98                          _buildSectionTitle('Recopilación de Datos'),
+99                          const SizedBox(height: 8),
+100                         _buildParagraph(
+101                           'Recopilamos información personal como nombre, correo electrónico, número de teléfono y datos médicos relevantes únicamente para proporcionar nuestros servicios de manera efectiva.',
+102                         ),
+```
+**[REMOVED]**
+```
+(from line ~154)
+                        'Nuestra aplicación ...',
+
+```
+**[ADDED]**
+```
+154                           'Nuestra aplicación facilita la gestión de citas médicas, conectando pacientes con profesionales de la salud de manera rápida y segura.',
+```
+**[REMOVED]**
+```
+(from line ~156)
+                      ... // Más secciones sobre la aplicación
+
+```
+**[ADDED]**
+```
+156                         const SizedBox(height: 16),
+157                         _buildSectionTitle('Nuestra Misión'),
+158                         const SizedBox(height: 8),
+159                         _buildParagraph(
+160                           'Mejorar el acceso a servicios de salud mediante tecnología innovadora, ofreciendo una plataforma intuitiva que simplifica la comunicación entre pacientes y médicos.',
+161                         ),
+162                         const SizedBox(height: 16),
+163                         _buildSectionTitle('Características'),
+164                         const SizedBox(height: 8),
+165                         _buildParagraph(
+166                           '• Agendamiento fácil de citas\n• Especialistas calificados\n• Mensajería con doctores\n• Historial médico seguro\n• Recordatorios de citas',
+167                         ),
+168                         const SizedBox(height: 16),
+169                         _buildSectionTitle('Versión'),
+170                         const SizedBox(height: 8),
+171                         _buildParagraph('1.0.0'),
+172                         const SizedBox(height: 16),
+173                         _buildSectionTitle('Contacto'),
+174                         const SizedBox(height: 8),
+175                         _buildParagraph(
+176                           'Email: support@doctorapp.com\nTeléfono: +52 123 456 7890',
+177                         ),
+178                         const SizedBox(height: 32),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:14:42*
+
+**[REMOVED]**
+```
+(from line ~150)
+                        'Nuestra aplicación .',
+
+```
+**[ADDED]**
+```
+150                           'Nuestra aplicación ...',
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:14:40*
+
+**[REMOVED]**
+```
+(from line ~150)
+                        'Nuestra aplicación facilita la gestión de citas médicas, conectando pacientes con profesionales de la salud de manera rápida y segura.',
+
+```
+**[ADDED]**
+```
+150                           'Nuestra aplicación .',
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:14:32*
+
+**[REMOVED]**
+```
+(from line ~95)
+                        'En nuestra aplicación de citas médicas, nos comprometemos a proteger tu privacidad y datos personales. Esta política describe cómo recopilamos, usamos y protegemos tu información.',
+
+```
+**[ADDED]**
+```
+95                            'En nuestra aplicación de citas...',
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:13:25*
+
+**[REMOVED]**
+```
+(from line ~152)
+                      ... 
+
+```
+**[ADDED]**
+```
+152                         ... // Más secciones sobre la aplicación
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:13:24*
+
+**[REMOVED]**
+```
+(from line ~152)
+                      
+
+```
+**[ADDED]**
+```
+152                         ... 
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:13:22*
+
+**[REMOVED]**
+```
+(from line ~152)
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Nuestra Misión'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Mejorar el acceso a servicios de salud mediante tecnología innovadora, ofreciendo una plataforma intuitiva que simplifica la comunicación entre pacientes y médicos.',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Características'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        '• Agendamiento fácil de citas\n• Especialistas calificados\n• Mensajería con doctores\n• Historial médico seguro\n• Recordatorios de citas',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Versión'),
+                      const SizedBox(height: 8),
+                      _buildParagraph('1.0.0'),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Contacto'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Email: support@doctorapp.com\nTeléfono: +52 123 456 7890',
+                      ),
+                      const SizedBox(height: 32),
+
+```
+**[ADDED]**
+```
+152                         
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:12:57*
+
+**[REMOVED]**
+```
+(from line ~98)
+                      ... //
+
+```
+**[ADDED]**
+```
+98                          ... // Más secciones de privacidad
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:12:56*
+
+**[REMOVED]**
+```
+(from line ~98)
+                      ... 
+
+```
+**[ADDED]**
+```
+98                          ... //
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:12:54*
+
+**[REMOVED]**
+```
+(from line ~98)
+                      ...
+
+```
+**[ADDED]**
+```
+98                          ... 
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:12:40*
+
+**[REMOVED]**
+```
+(from line ~98)
+                      _buildSectionTitle('Recopilación de Datos'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Recopilamos información personal como nombre, correo electrónico, número de teléfono y datos médicos relevantes únicamente para proporcionar nuestros servicios de manera efectiva.',
+                      ),
+
+```
+**[ADDED]**
+```
+98                          ...
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:12:24*
+
+**[REMOVED]**
+```
+(from line ~103)
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Uso de la Información'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Utilizamos tu información para:\n• Gestionar tus citas médicas\n• Comunicarnos contigo sobre tus consultas\n• Mejorar nuestros servicios\n• Cumplir con requisitos legales',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Seguridad'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos contra acceso no autorizado, pérdida o alteración.',
+                      ),
+                      const SizedBox(height: 16),
+                      _buildSectionTitle('Tus Derechos'),
+                      const SizedBox(height: 8),
+                      _buildParagraph(
+                        'Tienes derecho a acceder, corregir o eliminar tu información personal en cualquier momento. Contacta con nuestro equipo de soporte para ejercer estos derechos.',
+                      ),
+                      const SizedBox(height: 32),
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:10:55*
+
+**[REMOVED]**
+```
+(from line ~56)
+  /// Muestra un modal full-screen con información de privacidad
+  /// Utiliza: CupertinoModalPopup, CupertinoPageScaffold, CupertinoNavigationBar, CupertinoButton
+
+```
+**[ADDED]**
+```
+56      // Muestra un modal full-screen con información de privacidad
+57      // Utiliza: CupertinoModalPopup, CupertinoPageScaffold, CupertinoNavigationBar, CupertinoButton
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 23:05:12*
+
+**[REMOVED]**
+```
+(from line ~212)
+  /// Muestra un diálogo de confirmación estilo iOS para cerrar sesión
+  /// Utiliza: CupertinoAlertDialog, CupertinoDialogAction con acción destructiva
+
+```
+**[ADDED]**
+```
+212     // Muestra un diálogo de confirmación estilo iOS para cerrar sesión
+213     // Utiliza: CupertinoAlertDialog, CupertinoDialogAction con acción destructiva
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 21:33:46*
+
+**[REMOVED]**
+```
+(from line ~347)
+
+              // =========================================================================
+              // FRAGMENTO 2 (CodeSnap-plus): CupertinoSwitch - Preferencias Interactivas
+              // =========================================================================
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 21:33:38*
+
+**[REMOVED]**
+```
+(from line ~416)
+
+              // =========================================================================
+              // FRAGMENTO 3 (CodeSnap-plus): CupertinoSlidingSegmentedControl - Idioma
+              // =========================================================================
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 21:33:32*
+
+**[REMOVED]**
+```
+(from line ~456)
+
+              // =========================================================================
+              // FRAGMENTO 4 (CodeSnap-plus): CupertinoSlider - Tamaño de Fuente
+              // =========================================================================
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 21:33:23*
+
+**[REMOVED]**
+```
+(from line ~594)
+
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 21:33:17*
+
+**[REMOVED]**
+```
+(from line ~520)
+              
+
+```
+**[REMOVED]**
+```
+(from line ~521)
+
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 21:33:14*
+
+**[ADDED]**
+```
+520                 
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 7/11/2025, 21:33:12*
+
+**[REMOVED]**
+```
+(from line ~522)
+              // =========================================================================
+              // FRAGMENTO 5 (CodeSnap-plus): CupertinoListSection + CupertinoListTile
+              // =========================================================================
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 7/11/2025, 13:07:21*
+
+**[REMOVED]**
+```
+(from line ~217)
+                              color: Colors.white
+                        ,
+
+```
+**[ADDED]**
+```
+217                                 color: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 7/11/2025, 13:07:19*
+
+**[REMOVED]**
+```
+(from line ~217)
+                              color: Colors.white,
+
+```
+**[ADDED]**
+```
+217                                 color: Colors.white
+218                           ,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\profile_page.dart
+*Saved at: 3/11/2025, 21:12:16*
+
+**[REMOVED]**
+```
+(from line ~300)
+                            keyboardType: TextInpuztType.phone,
+
+```
+**[ADDED]**
+```
+300                               keyboardType: TextInputType.phone,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\profile_page.dart
+*Saved at: 3/11/2025, 21:12:13*
+
+**[REMOVED]**
+```
+(from line ~300)
+                            keyboardType: TextInputType.phone,
+
+```
+**[ADDED]**
+```
+300                               keyboardType: TextInpuztType.phone,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:40:06*
+
+**[ADDED]**
+```
+205   
+```
+**[ADDED]**
+```
+207                   
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:40:00*
+
+**[REMOVED]**
+```
+(from line ~213)
+                    value: _doctorSeleccionado,
+
+```
+**[ADDED]**
+```
+213                       initialValue: _doctorSeleccionado,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:39:57*
+
+**[REMOVED]**
+```
+(from line ~213)
+  value: _doctorSeleccionado,
+  decoration: InputDecoration(
+    prefixIcon: const Icon(Icons.person, color: Color(0xFF6366F1)),
+    hintText: 'Selecciona un doctor',
+    filled: true,
+    fillColor: Colors.white,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: Colors.grey[300]!),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Color(0xFF6366F1)),
+    ),
+  ),
+  items: _doctores.map((doctor) {
+    return DropdownMenuItem<Map<String, String>>(
+      value: doctor,
+      child: Text(
+        '${doctor['nombre']} — ${doctor['especialidad']}',
+        overflow: TextOverflow.ellipsis, // corta texto si es muy largo
+      ),
+    );
+  }).toList(),
+  onChanged: (value) {
+    setState(() {
+      _doctorSeleccionado = value;
+    });
+  },
+)
+
+```
+**[ADDED]**
+```
+213                       value: _doctorSeleccionado,
+214                       decoration: InputDecoration(
+215                         prefixIcon: const Icon(Icons.person, color: Color(0xFF6366F1)),
+216                         hintText: 'Selecciona un doctor',
+217                         filled: true,
+218                         fillColor: Colors.white,
+219                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+220                         enabledBorder: OutlineInputBorder(
+221                           borderRadius: BorderRadius.circular(12),
+222                           borderSide: BorderSide(color: Colors.grey[300]!),
+223                         ),
+224                         focusedBorder: OutlineInputBorder(
+225                           borderRadius: BorderRadius.circular(12),
+226                           borderSide: const BorderSide(color: Color(0xFF6366F1)),
+227                         ),
+228                       ),
+229                       items: _doctores.map((doctor) {
+230                         return DropdownMenuItem<Map<String, String>>(
+231                           value: doctor,
+232                           child: Text(
+233                             '${doctor['nombre']} — ${doctor['especialidad']}',
+234                             overflow: TextOverflow.ellipsis, // corta texto si es muy largo
+235                           ),
+236                         );
+237                       }).toList(),
+238                       onChanged: (value) {
+239                         setState(() {
+240                           _doctorSeleccionado = value;
+241                         });
+242                       },
+243                     )
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:39:27*
+
+**[REMOVED]**
+```
+(from line ~213)
+                    initialValue: _doctorSeleccionado,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      border: InputBorder.none,
+                      prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+                    ),
+                    hint: const Text('Selecciona un doctor'),
+                    items: _doctores.map((doctor) {
+                      return DropdownMenuItem<Map<String, String>>(
+                        value: doctor,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              doctor['nombre']!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              doctor['especialidad']!,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _doctorSeleccionado = value;
+                      });
+                    },
+                  ),
+
+```
+**[ADDED]**
+```
+213     value: _doctorSeleccionado,
+214     decoration: InputDecoration(
+215       prefixIcon: const Icon(Icons.person, color: Color(0xFF6366F1)),
+216       hintText: 'Selecciona un doctor',
+217       filled: true,
+218       fillColor: Colors.white,
+219       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+220       enabledBorder: OutlineInputBorder(
+221         borderRadius: BorderRadius.circular(12),
+222         borderSide: BorderSide(color: Colors.grey[300]!),
+223       ),
+224       focusedBorder: OutlineInputBorder(
+225         borderRadius: BorderRadius.circular(12),
+226         borderSide: const BorderSide(color: Color(0xFF6366F1)),
+227       ),
+228     ),
+229     items: _doctores.map((doctor) {
+230       return DropdownMenuItem<Map<String, String>>(
+231         value: doctor,
+232         child: Text(
+233           '${doctor['nombre']} — ${doctor['especialidad']}',
+234           overflow: TextOverflow.ellipsis, // corta texto si es muy largo
+235         ),
+236       );
+237     }).toList(),
+238     onChanged: (value) {
+239       setState(() {
+240         _doctorSeleccionado = value;
+241       });
+242     },
+243   )
+244   
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:37:47*
+
+**[REMOVED]**
+```
+(from line ~207)
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(12),
+    border: Border.all(color: Colors.grey[300]!),
+  ),
+  child: DropdownButtonFormField<Map<String, String>>(
+    initialValue: _doctorSeleccionado,
+    // Permitir que los items tengan altura variable y usar todo el ancho disponible
+    itemHeight: null,
+    isExpanded: true,
+    decoration: const InputDecoration(
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 16,
+      ),
+      border: InputBorder.none,
+      prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+      // Si necesitas ajustar el tamaño/posición del prefixIcon, añade:
+      // prefixIconConstraints: BoxConstraints(minWidth: 40, minHeight: 40),
+    ),
+    hint: const Text('Selecciona un doctor'),
+    items: _doctores.map((doctor) {
+      return DropdownMenuItem<Map<String, String>>(
+        value: doctor,
+        // Padding para que el item tenga espacio vertical y se vea completo
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // <- evita overflow y permite altura natural
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                doctor['nombre']!,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+
+```
+**[ADDED]**
+```
+207                     decoration: BoxDecoration(
+208                       color: Colors.white,
+209                       borderRadius: BorderRadius.circular(12),
+210                       border: Border.all(color: Colors.grey[300]!),
+211                     ),
+212                     child: DropdownButtonFormField<Map<String, String>>(
+213                       initialValue: _doctorSeleccionado,
+214                       decoration: const InputDecoration(
+215                         contentPadding: EdgeInsets.symmetric(
+216                           horizontal: 16,
+217                           vertical: 16,
+218                         ),
+219                         border: InputBorder.none,
+220                         prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+221                       ),
+222                       hint: const Text('Selecciona un doctor'),
+223                       items: _doctores.map((doctor) {
+224                         return DropdownMenuItem<Map<String, String>>(
+225                           value: doctor,
+226                           child: Column(
+227                             crossAxisAlignment: CrossAxisAlignment.start,
+228                             mainAxisAlignment: MainAxisAlignment.center,
+229                             children: [
+230                               Text(
+231                                 doctor['nombre']!,
+232                                 style: const TextStyle(
+233                                   fontWeight: FontWeight.w600,
+234                                 ),
+235                               ),
+236                               Text(
+237                                 doctor['especialidad']!,
+238                                 style: TextStyle(
+239                                   fontSize: 12,
+240                                   color: Colors.grey[600],
+241                                 ),
+242                               ),
+243                             ],
+244                           ),
+245                         );
+246                       }).toList(),
+247                       onChanged: (value) {
+248                         setState(() {
+249                           _doctorSeleccionado = value;
+250                         });
+251                       },
+252                     ),
+```
+**[REMOVED]**
+```
+(from line ~254)
+              ),
+              const SizedBox(height: 4),
+              Text(
+                doctor['especialidad']!,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList(),
+    onChanged: (value) {
+      setState(() {
+        _doctorSeleccionado = value;
+      });
+    },
+  ),
+),
+
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:37:46*
+
+**[REMOVED]**
+```
+(from line ~207)
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[300]!),
+                  ),
+                  child: DropdownButtonFormField<Map<String, String>>(
+                    initialValue: _doctorSeleccionado,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      border: InputBorder.none,
+                      prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+                    ),
+                    hint: const Text('Selecciona un doctor'),
+                    items: _doctores.map((doctor) {
+                      return DropdownMenuItem<Map<String, String>>(
+                        value: doctor,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              doctor['nombre']!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              doctor['especialidad']!,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _doctorSeleccionado = value;
+                      });
+                    },
+                  ),
+
+```
+**[ADDED]**
+```
+207     decoration: BoxDecoration(
+208       color: Colors.white,
+209       borderRadius: BorderRadius.circular(12),
+210       border: Border.all(color: Colors.grey[300]!),
+211     ),
+212     child: DropdownButtonFormField<Map<String, String>>(
+213       initialValue: _doctorSeleccionado,
+214       // Permitir que los items tengan altura variable y usar todo el ancho disponible
+215       itemHeight: null,
+216       isExpanded: true,
+217       decoration: const InputDecoration(
+218         contentPadding: EdgeInsets.symmetric(
+219           horizontal: 16,
+220           vertical: 16,
+221         ),
+222         border: InputBorder.none,
+223         prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+224         // Si necesitas ajustar el tamaño/posición del prefixIcon, añade:
+225         // prefixIconConstraints: BoxConstraints(minWidth: 40, minHeight: 40),
+226       ),
+227       hint: const Text('Selecciona un doctor'),
+228       items: _doctores.map((doctor) {
+229         return DropdownMenuItem<Map<String, String>>(
+230           value: doctor,
+231           // Padding para que el item tenga espacio vertical y se vea completo
+232           child: Padding(
+233             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+234             child: Column(
+235               mainAxisSize: MainAxisSize.min, // <- evita overflow y permite altura natural
+236               crossAxisAlignment: CrossAxisAlignment.start,
+237               children: [
+238                 Text(
+239                   doctor['nombre']!,
+240                   style: const TextStyle(
+241                     fontWeight: FontWeight.w600,
+```
+**[ADDED]**
+```
+243                 ),
+244                 const SizedBox(height: 4),
+245                 Text(
+246                   doctor['especialidad']!,
+247                   style: TextStyle(
+248                     fontSize: 12,
+249                     color: Colors.grey[600],
+250                   ),
+251                 ),
+252               ],
+253             ),
+254           ),
+255         );
+256       }).toList(),
+257       onChanged: (value) {
+258         setState(() {
+259           _doctorSeleccionado = value;
+260         });
+261       },
+262     ),
+263   ),
+264   
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:37:38*
+
+**[REMOVED]**
+```
+(from line ~205)
+
+
+```
+**[REMOVED]**
+```
+(from line ~206)
+                
+
+```
+**[REMOVED]**
+```
+(from line ~214)
+                    // Permitir que los items tengan altura variable y usar todo el ancho disponible
+                    itemHeight: null,
+                    isExpanded: true,
+
+```
+**[REMOVED]**
+```
+(from line ~221)
+                      // Si necesitas ajustar el tamaño/posición del prefixIcon, añade:
+                      // prefixIconConstraints: BoxConstraints(minWidth: 40, minHeight: 40),
+
+```
+**[REMOVED]**
+```
+(from line ~226)
+                        // Padding para que el item tenga espacio vertical y se vea completo
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min, // <- evita overflow y permite altura natural
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                doctor['nombre']!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+
+```
+**[ADDED]**
+```
+226                           child: Column(
+227                             crossAxisAlignment: CrossAxisAlignment.start,
+228                             mainAxisAlignment: MainAxisAlignment.center,
+229                             children: [
+230                               Text(
+231                                 doctor['nombre']!,
+232                                 style: const TextStyle(
+233                                   fontWeight: FontWeight.w600,
+```
+**[REMOVED]**
+```
+(from line ~235)
+                              const SizedBox(height: 4),
+                              Text(
+                                doctor['especialidad']!,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                ),
+
+```
+**[ADDED]**
+```
+235                               ),
+236                               Text(
+237                                 doctor['especialidad']!,
+238                                 style: TextStyle(
+239                                   fontSize: 12,
+240                                   color: Colors.grey[600],
+```
+**[REMOVED]**
+```
+(from line ~242)
+                            ],
+                          ),
+
+```
+**[ADDED]**
+```
+242                               ),
+243                             ],
+```
+**[REMOVED]**
+```
+(from line ~254)
+
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:35:42*
+
+**[ADDED]**
+```
+205   
+```
+**[ADDED]**
+```
+207                   
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:35:36*
+
+**[REMOVED]**
+```
+(from line ~207)
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(12),
+    border: Border.all(color: Colors.grey[300]!),
+  ),
+  child: DropdownButtonFormField<Map<String, String>>(
+    initialValue: _doctorSeleccionado,
+    // Permitir que los items tengan altura variable y usar todo el ancho disponible
+    itemHeight: null,
+    isExpanded: true,
+    decoration: const InputDecoration(
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 16,
+      ),
+      border: InputBorder.none,
+      prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+      // Si necesitas ajustar el tamaño/posición del prefixIcon, añade:
+      // prefixIconConstraints: BoxConstraints(minWidth: 40, minHeight: 40),
+    ),
+    hint: const Text('Selecciona un doctor'),
+    items: _doctores.map((doctor) {
+      return DropdownMenuItem<Map<String, String>>(
+        value: doctor,
+        // Padding para que el item tenga espacio vertical y se vea completo
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // <- evita overflow y permite altura natural
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                doctor['nombre']!,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+
+```
+**[ADDED]**
+```
+207                     decoration: BoxDecoration(
+208                       color: Colors.white,
+209                       borderRadius: BorderRadius.circular(12),
+210                       border: Border.all(color: Colors.grey[300]!),
+211                     ),
+212                     child: DropdownButtonFormField<Map<String, String>>(
+213                       initialValue: _doctorSeleccionado,
+214                       // Permitir que los items tengan altura variable y usar todo el ancho disponible
+215                       itemHeight: null,
+216                       isExpanded: true,
+217                       decoration: const InputDecoration(
+218                         contentPadding: EdgeInsets.symmetric(
+219                           horizontal: 16,
+220                           vertical: 16,
+221                         ),
+222                         border: InputBorder.none,
+223                         prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+224                         // Si necesitas ajustar el tamaño/posición del prefixIcon, añade:
+225                         // prefixIconConstraints: BoxConstraints(minWidth: 40, minHeight: 40),
+226                       ),
+227                       hint: const Text('Selecciona un doctor'),
+228                       items: _doctores.map((doctor) {
+229                         return DropdownMenuItem<Map<String, String>>(
+230                           value: doctor,
+231                           // Padding para que el item tenga espacio vertical y se vea completo
+232                           child: Padding(
+233                             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+234                             child: Column(
+235                               mainAxisSize: MainAxisSize.min, // <- evita overflow y permite altura natural
+236                               crossAxisAlignment: CrossAxisAlignment.start,
+237                               children: [
+238                                 Text(
+239                                   doctor['nombre']!,
+240                                   style: const TextStyle(
+241                                     fontWeight: FontWeight.w600,
+242                                   ),
+243                                 ),
+244                                 const SizedBox(height: 4),
+245                                 Text(
+246                                   doctor['especialidad']!,
+247                                   style: TextStyle(
+248                                     fontSize: 12,
+249                                     color: Colors.grey[600],
+250                                   ),
+251                                 ),
+252                               ],
+253                             ),
+254                           ),
+255                         );
+256                       }).toList(),
+257                       onChanged: (value) {
+258                         setState(() {
+259                           _doctorSeleccionado = value;
+260                         });
+261                       },
+262                     ),
+```
+**[REMOVED]**
+```
+(from line ~264)
+              ),
+              const SizedBox(height: 4),
+              Text(
+                doctor['especialidad']!,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList(),
+    onChanged: (value) {
+      setState(() {
+        _doctorSeleccionado = value;
+      });
+    },
+  ),
+),
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointment_page.dart
+*Saved at: 29/10/2025, 17:35:26*
+
+**[REMOVED]**
+```
+(from line ~207)
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[300]!),
+                  ),
+                  child: DropdownButtonFormField<Map<String, String>>(
+                    initialValue: _doctorSeleccionado,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      border: InputBorder.none,
+                      prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+                    ),
+                    hint: const Text('Selecciona un doctor'),
+                    items: _doctores.map((doctor) {
+                      return DropdownMenuItem<Map<String, String>>(
+                        value: doctor,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              doctor['nombre']!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              doctor['especialidad']!,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _doctorSeleccionado = value;
+                      });
+                    },
+                  ),
+
+```
+**[ADDED]**
+```
+207     decoration: BoxDecoration(
+208       color: Colors.white,
+209       borderRadius: BorderRadius.circular(12),
+210       border: Border.all(color: Colors.grey[300]!),
+211     ),
+212     child: DropdownButtonFormField<Map<String, String>>(
+213       initialValue: _doctorSeleccionado,
+214       // Permitir que los items tengan altura variable y usar todo el ancho disponible
+215       itemHeight: null,
+216       isExpanded: true,
+217       decoration: const InputDecoration(
+218         contentPadding: EdgeInsets.symmetric(
+219           horizontal: 16,
+220           vertical: 16,
+221         ),
+222         border: InputBorder.none,
+223         prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+224         // Si necesitas ajustar el tamaño/posición del prefixIcon, añade:
+225         // prefixIconConstraints: BoxConstraints(minWidth: 40, minHeight: 40),
+226       ),
+227       hint: const Text('Selecciona un doctor'),
+228       items: _doctores.map((doctor) {
+229         return DropdownMenuItem<Map<String, String>>(
+230           value: doctor,
+231           // Padding para que el item tenga espacio vertical y se vea completo
+232           child: Padding(
+233             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+234             child: Column(
+235               mainAxisSize: MainAxisSize.min, // <- evita overflow y permite altura natural
+236               crossAxisAlignment: CrossAxisAlignment.start,
+237               children: [
+238                 Text(
+239                   doctor['nombre']!,
+240                   style: const TextStyle(
+241                     fontWeight: FontWeight.w600,
+```
+**[ADDED]**
+```
+243                 ),
+244                 const SizedBox(height: 4),
+245                 Text(
+246                   doctor['especialidad']!,
+247                   style: TextStyle(
+248                     fontSize: 12,
+249                     color: Colors.grey[600],
+250                   ),
+251                 ),
+252               ],
+253             ),
+254           ),
+255         );
+256       }).toList(),
+257       onChanged: (value) {
+258         setState(() {
+259           _doctorSeleccionado = value;
+260         });
+261       },
+262     ),
+263   ),
+264   
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 17:30:50*
+
+**[REMOVED]**
+```
+(from line ~217)
+                              color: Colors.W,
+
+```
+**[ADDED]**
+```
+217                                 color: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 17:30:47*
+
+**[REMOVED]**
+```
+(from line ~217)
+                              color: Colors,
+
+```
+**[ADDED]**
+```
+217                                 color: Colors.W,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 17:30:45*
+
+**[REMOVED]**
+```
+(from line ~217)
+                              color: Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+217                                 color: Colors,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 17:30:22*
+
+**[REMOVED]**
+```
+(from line ~258)
+                            color: Colors.white,
+
+```
+**[ADDED]**
+```
+258                               color: const Color(0xFF6366F1),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 17:30:04*
+
+**[REMOVED]**
+```
+(from line ~258)
+                            color: Colors.White,
+
+```
+**[ADDED]**
+```
+258                               color: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 17:30:03*
+
+**[REMOVED]**
+```
+(from line ~258)
+                            color: Colors.white,
+
+```
+**[ADDED]**
+```
+258                               color: Colors.White,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\appointments_list_page.dart
+*Saved at: 29/10/2025, 17:29:59*
+
+**[REMOVED]**
+```
+(from line ~258)
+                            color: const Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+258                               color: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:26:56*
+
+**[REMOVED]**
+```
+(from line ~404)
+                  iconColor: Colors.red,
+
+```
+**[ADDED]**
+```
+404                     iconColor: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:26:48*
+
+**[REMOVED]**
+```
+(from line ~389)
+                      iconColor: const Color(0xFFF59E0B),
+
+```
+**[ADDED]**
+```
+389                         iconColor: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:26:44*
+
+**[REMOVED]**
+```
+(from line ~381)
+                      iconColor: const Color(0xFF8B5CF6),
+
+```
+**[ADDED]**
+```
+381                         iconColor: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:26:41*
+
+**[REMOVED]**
+```
+(from line ~371)
+                      iconColor:  Colors.white,
+
+```
+**[ADDED]**
+```
+371                         iconColor: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:26:38*
+
+**[REMOVED]**
+```
+(from line ~371)
+                      iconColor: const Colors.white,
+
+```
+**[ADDED]**
+```
+371                         iconColor:  Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:26:33*
+
+**[REMOVED]**
+```
+(from line ~371)
+                      iconColor: const Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+371                         iconColor: const Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:26:30*
+
+**[REMOVED]**
+```
+(from line ~371)
+                      iconColor: const Colors.white,
+
+```
+**[ADDED]**
+```
+371                         iconColor: const Color(0xFF6366F1),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:26:27*
+
+**[REMOVED]**
+```
+(from line ~371)
+                      iconColor: const Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+371                         iconColor: const Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\messages_page.dart
+*Saved at: 29/10/2025, 17:24:28*
+
+**[REMOVED]**
+```
+(from line ~299)
+}
+
+```
+**[ADDED]**
+```
+299   }
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\messages_page.dart
+*Saved at: 29/10/2025, 17:24:27*
+
+**[REMOVED]**
+```
+(from line ~142)
+                              color: Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+142                                 color: Colors.white,
+```
+**[REMOVED]**
+```
+(from line ~201)
+                            color: Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+201                               color: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
+*Saved at: 29/10/2025, 17:24:12*
+
+**[REMOVED]**
+```
+(from line ~474)
+}
+
+```
+**[ADDED]**
+```
+474   }
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
+*Saved at: 29/10/2025, 17:23:57*
+
+**[REMOVED]**
+```
+(from line ~171)
+                                const Column(
+
+```
+**[ADDED]**
+```
+171                                        const Column(
+```
+**[REMOVED]**
+```
+(from line ~521)
+              color: Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+521                 color: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
+*Saved at: 29/10/2025, 17:21:40*
+
+**[REMOVED]**
+```
+(from line ~237)
+                                    color: Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+237                                       color: Colors.white,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
+*Saved at: 29/10/2025, 17:21:08*
+
+**[REMOVED]**
+```
+(from line ~167)
+                                    color: Colors.white,
+
+```
+**[ADDED]**
+```
+167                                       color: Color(0xFF6366F1),
+```
+
+---
+
 ### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\settings_page.dart
 *Saved at: 29/10/2025, 14:46:24*
 

@@ -202,7 +202,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     color: Color(0xFF1A1A1A),
                   ),
                 ),
+
                 const SizedBox(height: 12),
+                
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -211,36 +213,27 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   ),
                   child: DropdownButtonFormField<Map<String, String>>(
                     initialValue: _doctorSeleccionado,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.person, color: Color(0xFF6366F1)),
+                      hintText: 'Selecciona un doctor',
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey[300]!),
                       ),
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.person, color: Color(0xFF6366F1)),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF6366F1)),
+                      ),
                     ),
-                    hint: const Text('Selecciona un doctor'),
                     items: _doctores.map((doctor) {
                       return DropdownMenuItem<Map<String, String>>(
                         value: doctor,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              doctor['nombre']!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              doctor['especialidad']!,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          '${doctor['nombre']} — ${doctor['especialidad']}',
+                          overflow: TextOverflow.ellipsis, // corta texto si es muy largo
                         ),
                       );
                     }).toList(),
@@ -249,7 +242,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         _doctorSeleccionado = value;
                       });
                     },
-                  ),
+                  )
+
                 ),
                 const SizedBox(height: 24),
 

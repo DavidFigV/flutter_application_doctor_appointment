@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Para HapticFeedback en gestos
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'routes.dart';
@@ -60,12 +61,154 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // ============================================================================
+  // GESTO #1: RefreshIndicator - Pull-to-Refresh
+  // ============================================================================
+  /// Método para refrescar datos (citas y usuario) desde Firebase
+  Future<void> _handleRefresh() async {
+    final authState = context.read<AuthBloc>().state;
+    if (authState is AuthAuthenticated) {
+      // Disparar eventos de carga de datos
+      context.read<UserBloc>().add(UserLoadRequested(authState.user.uid));
+      context.read<AppointmentBloc>().add(AppointmentLoadRequested(authState.user.uid));
+
+      // Esperar un momento para que BLoC procese los eventos
+      await Future.delayed(const Duration(milliseconds: 800));
+    }
+  }
+
+  // ============================================================================
+  // GESTO #2: GestureDetector onLongPress - Menú de Acciones Rápidas
+  // ============================================================================
+  /// Muestra un BottomSheet con acciones rápidas para una cita
+  void _showQuickActions(BuildContext context, String appointmentId) {
+    // Haptic feedback cuando se mantiene presionado
+    HapticFeedback.mediumImpact();
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Indicador visual
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              // Título
+              const Text(
+                'Acciones Rápidas',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Opción: Ver Detalles
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.info_outline, color: Colors.blue),
+                ),
+                title: const Text('Ver Detalles'),
+                subtitle: const Text('Información completa de la cita'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, Routes.appointmentsList);
+                },
+              ),
+              // Opción: Editar
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.edit_outlined, color: Colors.green),
+                ),
+                title: const Text('Editar Cita'),
+                subtitle: const Text('Modificar fecha, hora o motivo'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, Routes.appointmentsList);
+                },
+              ),
+              // Opción: Cancelar
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.cancel_outlined, color: Colors.red),
+                ),
+                title: const Text('Cancelar Cita'),
+                subtitle: const Text('Eliminar esta cita'),
+                onTap: () {
+                  Navigator.pop(context);
+                  // Mostrar confirmación
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Cancelar Cita'),
+                      content: const Text('¿Estás seguro de que deseas cancelar esta cita?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            // Aquí iría la lógica de eliminación
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Cita cancelada'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          },
+                          child: const Text('Sí', style: TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: SafeArea(
-        child: SingleChildScrollView(
+        // RefreshIndicator: Permite pull-to-refresh para actualizar datos
+        child: RefreshIndicator(
+          onRefresh: _handleRefresh,
+          color: const Color(0xFF6366F1), // Color del indicador
+          child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -164,11 +307,11 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: const Icon(
                                     Icons.add,
-                                    color: Colors.white,
+                                    color: Color(0xFF6366F1),
                                     size: 28,
                                   ),
                                 ),
-                                const Column(
+                                     const Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
@@ -234,7 +377,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: const Icon(
                                     Icons.medical_information_outlined,
-                                    color: Color(0xFF6366F1),
+                                    color: Colors.white,
                                     size: 28,
                                   ),
                                 ),
@@ -392,11 +535,17 @@ class _HomePageState extends State<HomePage> {
 
                           return Column(
                             children: [
-                              _buildAppointmentCard(
-                                cita.nombreDoctor,
-                                cita.especialidadDoctor,
-                                _formatearFecha(Timestamp.fromDate(cita.fecha)),
-                                cita.hora,
+                              // GestureDetector con onLongPress para acciones rápidas
+                              GestureDetector(
+                                onLongPress: () {
+                                  _showQuickActions(context, cita.id ?? '');
+                                },
+                                child: _buildAppointmentCard(
+                                  cita.nombreDoctor,
+                                  cita.especialidadDoctor,
+                                  _formatearFecha(Timestamp.fromDate(cita.fecha)),
+                                  cita.hora,
+                                ),
                               ),
                               if (index < citasLimitadas.length - 1)
                                 const SizedBox(height: 12),
@@ -437,6 +586,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -462,28 +612,48 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // ============================================================================
+  // GESTO #3: GestureDetector onDoubleTap - Chips de Especialistas
+  // ============================================================================
   Widget _buildSpecialistChip(String title, IconData icon) {
-    return Container(
-      margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[300]!),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: const Color(0xFF6366F1)),
-          const SizedBox(width: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1A1A),
-            ),
+    // GestureDetector con single tap y double tap
+    return GestureDetector(
+      // Single tap: Mostrar información del especialista
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Especialidad: $title'),
+            duration: const Duration(seconds: 1),
+            backgroundColor: const Color(0xFF6366F1),
           ),
-        ],
+        );
+      },
+      // Double tap: Navegar rápido a crear cita
+      onDoubleTap: () {
+        Navigator.pushNamed(context, Routes.appointment);
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey[300]!),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: const Color(0xFF6366F1)),
+            const SizedBox(width: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1A1A1A),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -518,7 +688,7 @@ class _HomePageState extends State<HomePage> {
             ),
             child: const Icon(
               Icons.person,
-              color: Color(0xFF6366F1),
+              color: Colors.white,
               size: 30,
             ),
           ),

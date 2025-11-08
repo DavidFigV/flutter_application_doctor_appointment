@@ -139,7 +139,7 @@ class _MessagesPageState extends State<MessagesPage> {
                             child: const Icon(
                               Icons.person,
                               size: 30,
-                              color: Color(0xFF6366F1),
+                              color: Colors.white,
                             ),
                           ),
                           if (doctor['online'])
@@ -198,7 +198,7 @@ class _MessagesPageState extends State<MessagesPage> {
                           child: const Icon(
                             Icons.person,
                             size: 28,
-                            color: Color(0xFF6366F1),
+                            color: Colors.white,
                           ),
                         ),
                         if (doctor['online'])

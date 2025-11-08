@@ -14,6 +14,16 @@ class _AppointmentsListPageState extends State<AppointmentsListPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // ============================================================================
+  // GESTO #4: RefreshIndicator - Pull-to-Refresh (método auxiliar)
+  // ============================================================================
+  /// Método para refrescar el stream de citas
+  /// Aunque StreamBuilder se actualiza automáticamente, esto da control manual
+  Future<void> _handleRefresh() async {
+    setState(() {}); // Forzar rebuild del widget
+    await Future.delayed(const Duration(milliseconds: 500));
+  }
+
   Stream<QuerySnapshot> _getAllCitasStream() {
     final user = _auth.currentUser;
     if (user == null) {
@@ -108,9 +118,12 @@ class _AppointmentsListPageState extends State<AppointmentsListPage> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _getAllCitasStream(),
-        builder: (context, snapshot) {
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        color: const Color(0xFF6366F1),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _getAllCitasStream(),
+          builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(
@@ -184,8 +197,128 @@ class _AppointmentsListPageState extends State<AppointmentsListPage> {
               final cita = citaDoc.data() as Map<String, dynamic>;
               final citaId = citaDoc.id;
 
-              return Container(
-                margin: const EdgeInsets.only(bottom: 16),
+              // ====================================================================
+              // GESTO #5: Dismissible - Swipe para Editar/Eliminar
+              // ====================================================================
+              return Dismissible(
+                key: Key(citaId),
+                // Swipe derecha: Editar (azul)
+                background: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit, color: Colors.white, size: 32),
+                      SizedBox(height: 4),
+                      Text(
+                        'Editar',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Swipe izquierda: Eliminar (rojo)
+                secondaryBackground: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.delete, color: Colors.white, size: 32),
+                      SizedBox(height: 4),
+                      Text(
+                        'Eliminar',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Confirmar antes de eliminar
+                confirmDismiss: (direction) async {
+                  if (direction == DismissDirection.endToStart) {
+                    // Swipe izquierda -> Eliminar
+                    return await showDialog<bool>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Eliminar Cita'),
+                          content: Text(
+                            '¿Estás seguro que deseas eliminar la cita con ${cita['nombre_doctor']}?',
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: const Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.red,
+                              ),
+                              child: const Text('Eliminar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    // Swipe derecha -> Editar (no dismiss)
+                    Navigator.pushNamed(
+                      context,
+                      Routes.editAppointment,
+                      arguments: {
+                        'citaId': citaId,
+                        'citaData': cita,
+                      },
+                    );
+                    return false; // No dismissar
+                  }
+                },
+                onDismissed: (direction) async {
+                  // Solo se ejecuta si confirmDismiss retorna true (eliminar)
+                  try {
+                    await _firestore.collection('citas').doc(citaId).delete();
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Cita eliminada exitosamente'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error al eliminar: $e'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
@@ -214,7 +347,7 @@ class _AppointmentsListPageState extends State<AppointmentsListPage> {
                             ),
                             child: const Icon(
                               Icons.person,
-                              color: Color(0xFF6366F1),
+                              color: Colors.white,
                               size: 32,
                             ),
                           ),
@@ -335,10 +468,12 @@ class _AppointmentsListPageState extends State<AppointmentsListPage> {
                     ],
                   ),
                 ),
+                ),
               );
             },
           );
         },
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
