@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'routes.dart';
+import '../../routes.dart';
 
 class AppointmentsListPage extends StatefulWidget {
   const AppointmentsListPage({super.key});

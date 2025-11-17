@@ -54,4 +54,49 @@ class UserRepository {
       return false;
     }
   }
+
+  // Obtener el rol del usuario (verifica si existe en la colección doctores)
+  Future<String> getUserRole(String uid) async {
+    try {
+      final doctorDoc = await _firestore.collection('doctores').doc(uid).get();
+
+      if (doctorDoc.exists) {
+        return 'medico';
+      } else {
+        return 'paciente';
+      }
+    } catch (e) {
+      throw Exception('Error al obtener rol del usuario: $e');
+    }
+  }
+
+  // Obtener datos completos del usuario incluyendo rol
+  Future<Map<String, dynamic>> getUserWithRole(String uid) async {
+    try {
+      // Obtener datos básicos del usuario
+      final userDoc = await _firestore.collection('usuarios').doc(uid).get();
+
+      if (!userDoc.exists) {
+        throw Exception('Usuario no encontrado');
+      }
+
+      Map<String, dynamic> userData = userDoc.data()!;
+
+      // Verificar si es médico
+      final doctorDoc = await _firestore.collection('doctores').doc(uid).get();
+
+      if (doctorDoc.exists) {
+        // Es médico, agregar datos de doctor
+        userData['role'] = 'medico';
+        userData.addAll(doctorDoc.data()!);
+      } else {
+        // Es paciente
+        userData['role'] = 'paciente';
+      }
+
+      return userData;
+    } catch (e) {
+      throw Exception('Error al obtener datos completos del usuario: $e');
+    }
+  }
 }

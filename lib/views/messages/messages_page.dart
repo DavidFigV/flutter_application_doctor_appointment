@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'routes.dart';
+import '../../routes.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({super.key});

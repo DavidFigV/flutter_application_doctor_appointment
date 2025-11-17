@@ -1,3 +1,843 @@
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 21:00:36*
+
+**[REMOVED]**
+```
+(from line ~647)
+                          width: ,
+
+```
+**[ADDED]**
+```
+647                             width: double.maxFinite,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 21:00:13*
+
+**[REMOVED]**
+```
+(from line ~647)
+                          
+
+```
+**[ADDED]**
+```
+647                             width: ,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 21:00:08*
+
+**[REMOVED]**
+```
+(from line ~647)
+                          expanded
+
+```
+**[ADDED]**
+```
+647                             
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 21:00:05*
+
+**[REMOVED]**
+```
+(from line ~647)
+                          expand 
+
+```
+**[ADDED]**
+```
+647                             expanded
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 21:00:02*
+
+**[REMOVED]**
+```
+(from line ~647)
+                          expand
+
+```
+**[ADDED]**
+```
+647                             expand 
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 21:00:01*
+
+**[REMOVED]**
+```
+(from line ~647)
+                          exp
+
+```
+**[ADDED]**
+```
+647                             expand
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 21:00:00*
+
+**[REMOVED]**
+```
+(from line ~647)
+                          ex
+
+```
+**[ADDED]**
+```
+647                             exp
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:59*
+
+**[REMOVED]**
+```
+(from line ~647)
+                          
+
+```
+**[ADDED]**
+```
+647                             ex
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:57*
+
+**[ADDED]**
+```
+647                             
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:45*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            ex
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:43*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            expanded: true,
+
+```
+**[ADDED]**
+```
+646                               ex
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:14*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            expande
+
+```
+**[ADDED]**
+```
+646                               expanded: true,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:12*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            expan
+
+```
+**[ADDED]**
+```
+646                               expande
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:08*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            exp
+
+```
+**[ADDED]**
+```
+646                               expan
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:05*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            e
+
+```
+**[ADDED]**
+```
+646                               exp
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:02*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            ex
+
+```
+**[ADDED]**
+```
+646                               e
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:59:00*
+
+**[ADDED]**
+```
+646                               ex
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:57:35*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            width: double.infinity,
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:57:08*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            wi
+
+```
+**[ADDED]**
+```
+646                               width: double.infinity,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:57:06*
+
+**[ADDED]**
+```
+646                               wi
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:55:11*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:55:06*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            s
+
+```
+**[ADDED]**
+```
+646                               
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:55:04*
+
+**[REMOVED]**
+```
+(from line ~646)
+                            
+
+```
+**[ADDED]**
+```
+646                               s
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
+*Saved at: 16/11/2025, 20:55:02*
+
+**[ADDED]**
+```
+18    import '../../repositories/doctor_repository.dart';
+```
+**[REMOVED]**
+```
+(from line ~63)
+          context.read<DashboardBloc>().add(DashboardLoadRequested(authState.user.uid));
+
+```
+**[ADDED]**
+```
+63              final doctorRepo = context.read<DoctorRepository>();
+64              final doctorData = await doctorRepo.getDoctorData(authState.user.uid);
+65    
+66              if (doctorData != null && mounted) {
+67                context.read<DashboardBloc>().add(
+68                  DashboardLoadRequested(
+69                    doctorId: authState.user.uid,
+70                    especialidad: doctorData.especialidad,
+71                  ),
+72                );
+73              }
+```
+**[REMOVED]**
+```
+(from line ~130)
+            final citasHoy = state.stats.citasHoy;
+
+```
+**[ADDED]**
+```
+130               final citasEsteMes = state.stats.citasEsteMes;
+```
+**[REMOVED]**
+```
+(from line ~132)
+            subtitle = '$citasHoy citas hoy · $pendientes pendientes';
+
+```
+**[ADDED]**
+```
+132               subtitle = '$citasEsteMes este mes · $pendientes pendientes';
+```
+**[REMOVED]**
+```
+(from line ~519)
+                                    value: '${state.stats.totalPacientes}',
+
+```
+**[ADDED]**
+```
+519                                       value: '${state.stats.totalPacientesUnicos}',
+```
+**[ADDED]**
+```
+646                               
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\appointments\appointment_page.dart
+*Saved at: 16/11/2025, 19:21:02*
+
+**[ADDED]**
+```
+286                         // Filtrar duplicados por nombre
+287                         final nombresUnicos = <String>{};
+288                         final especialidadesUnicas = <EspecialidadModel>[];
+289                         for (var especialidad in especialidades) {
+290                           if (!nombresUnicos.contains(especialidad.nombre)) {
+291                             nombresUnicos.add(especialidad.nombre);
+292                             especialidadesUnicas.add(especialidad);
+293                           }
+294                         }
+295   
+```
+**[REMOVED]**
+```
+(from line ~325)
+                          items: especialidades.map((especialidad) {
+
+```
+**[ADDED]**
+```
+325                             items: especialidadesUnicas.map((especialidad) {
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\auth\register_page.dart
+*Saved at: 16/11/2025, 14:20:19*
+
+**[REMOVED]**
+```
+(from line ~6)
+import '../../repositories/auth_repository.dart';
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\auth\register_page.dart
+*Saved at: 16/11/2025, 14:20:13*
+
+**[REMOVED]**
+```
+(from line ~63)
+      final authRepo = context.read<AuthRepository>();
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\appointments\appointment_page.dart
+*Saved at: 16/11/2025, 14:06:34*
+
+**[REMOVED]**
+```
+(from line ~453)
+                                    value: _doctorSeleccionadoUid,
+
+```
+**[ADDED]**
+```
+453                                       initialValue: _doctorSeleccionadoUid,
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\appointments\appointment_page.dart
+*Saved at: 16/11/2025, 14:06:27*
+
+**[ADDED]**
+```
+14    import '../../models/doctor_model.dart';
+```
+**[ADDED]**
+```
+62      Future<Map<String, String>> _loadDoctorNames(
+63        List<DoctorModel> doctores,
+64        UserRepository userRepo,
+65      ) async {
+66        final Map<String, String> names = {};
+67        for (var doctor in doctores) {
+68          try {
+69            final userData = await userRepo.getUserData(doctor.uid);
+70            names[doctor.uid] = userData.nombre;
+71          } catch (e) {
+72            names[doctor.uid] = 'Doctor';
+73          }
+74        }
+75        return names;
+76      }
+77    
+```
+**[REMOVED]**
+```
+(from line ~182)
+        telefonoPaciente: userData.telefono,
+
+```
+**[ADDED]**
+```
+182           telefonoPaciente: userData.telefono ?? '',
+```
+**[REMOVED]**
+```
+(from line ~293)
+                          value: _especialidadSeleccionada,
+
+```
+**[ADDED]**
+```
+293                             initialValue: _especialidadSeleccionada,
+```
+**[REMOVED]**
+```
+(from line ~366)
+                      : StreamBuilder<List<Map<String, dynamic>>>(
+
+```
+**[ADDED]**
+```
+366                         : StreamBuilder<List<DoctorModel>>(
+```
+**[REMOVED]**
+```
+(from line ~425)
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[300]!),
+                              ),
+                              child: DropdownButtonFormField<String>(
+                                value: _doctorSeleccionadoUid,
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.person,
+                                      color: Color(0xFF6366F1)),
+                                  hintText: 'Selecciona un doctor',
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 12,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: Colors.grey[300]!,
+
+```
+**[ADDED]**
+```
+425                               return FutureBuilder<Map<String, String>>(
+426                                 future: _loadDoctorNames(doctores, userRepo),
+427                                 builder: (context, namesSnapshot) {
+428                                   if (!namesSnapshot.hasData) {
+429                                     return Container(
+430                                       padding: const EdgeInsets.all(16),
+431                                       decoration: BoxDecoration(
+432                                         color: Colors.white,
+433                                         borderRadius: BorderRadius.circular(12),
+434                                         border: Border.all(color: Colors.grey[300]!),
+```
+**[REMOVED]**
+```
+(from line ~436)
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xFF6366F1),
+
+```
+**[ADDED]**
+```
+436                                       child: const Center(
+437                                         child: CircularProgressIndicator(
+438                                           color: Color(0xFF6366F1),
+439                                         ),
+```
+**[ADDED]**
+```
+441                                     );
+442                                   }
+443   
+444                                   final doctorNames = namesSnapshot.data!;
+445   
+446                                   return Container(
+447                                     decoration: BoxDecoration(
+448                                       color: Colors.white,
+449                                       borderRadius: BorderRadius.circular(12),
+450                                       border: Border.all(color: Colors.grey[300]!),
+```
+**[REMOVED]**
+```
+(from line ~452)
+                                ),
+                                items: doctores.map((doctor) {
+                                  return DropdownMenuItem<String>(
+                                    value: doctor['uid'] as String,
+                                    child: Text(
+                                      doctor['nombre'] as String,
+                                      overflow: TextOverflow.ellipsis,
+
+```
+**[ADDED]**
+```
+452                                     child: DropdownButtonFormField<String>(
+453                                       value: _doctorSeleccionadoUid,
+454                                       decoration: InputDecoration(
+455                                         prefixIcon: const Icon(Icons.person,
+456                                             color: Color(0xFF6366F1)),
+457                                         hintText: 'Selecciona un doctor',
+458                                         filled: true,
+459                                         fillColor: Colors.white,
+460                                         contentPadding: const EdgeInsets.symmetric(
+461                                           horizontal: 16,
+462                                           vertical: 12,
+463                                         ),
+464                                         enabledBorder: OutlineInputBorder(
+465                                           borderRadius: BorderRadius.circular(12),
+466                                           borderSide: BorderSide(
+467                                             color: Colors.grey[300]!,
+468                                           ),
+469                                         ),
+470                                         focusedBorder: OutlineInputBorder(
+471                                           borderRadius: BorderRadius.circular(12),
+472                                           borderSide: const BorderSide(
+473                                             color: Color(0xFF6366F1),
+474                                           ),
+475                                         ),
+```
+**[REMOVED]**
+```
+(from line ~477)
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _doctorSeleccionadoUid = value;
+                                    // Find doctor name
+                                    final doctor = doctores.firstWhere(
+                                      (d) => d['uid'] == value,
+                                    );
+                                    _doctorSeleccionadoNombre =
+                                        doctor['nombre'] as String;
+                                  });
+                                },
+                              ),
+
+```
+**[ADDED]**
+```
+477                                       items: doctores.map((doctor) {
+478                                         return DropdownMenuItem<String>(
+479                                           value: doctor.uid,
+480                                           child: Text(
+481                                             doctorNames[doctor.uid] ?? 'Doctor',
+482                                             overflow: TextOverflow.ellipsis,
+483                                           ),
+484                                         );
+485                                       }).toList(),
+486                                       onChanged: (value) {
+487                                         setState(() {
+488                                           _doctorSeleccionadoUid = value;
+489                                           _doctorSeleccionadoNombre =
+490                                               doctorNames[value] ?? 'Doctor';
+491                                         });
+492                                       },
+493                                     ),
+494                                   );
+495                                 },
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\dashboard\dashboard_page.dart
+*Saved at: 16/11/2025, 9:56:07*
+
+**[REMOVED]**
+```
+(from line ~32)
+            DashboardLoadRequested(authState.user.uid, doctorId: '', especialidad: ''),
+
+```
+**[ADDED]**
+```
+32                DashboardLoadRequested(authState.user.uid),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\dashboard\dashboard_page.dart
+*Saved at: 16/11/2025, 9:55:47*
+
+**[REMOVED]**
+```
+(from line ~32)
+            DashboardLoadRequested(authState.user.uid),
+
+```
+**[ADDED]**
+```
+32                DashboardLoadRequested(authState.user.uid, doctorId: '', especialidad: ''),
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\bloc\dashboard\dashboard_event.dart
+*Saved at: 16/11/2025, 9:55:23*
+
+**[REMOVED]**
+```
+(from line ~15)
+  const DashboardLoadRequested({
+
+```
+**[ADDED]**
+```
+15      const DashboardLoadRequested(String uid, {
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\settings\settings_page.dart
+*Saved at: 16/11/2025, 9:36:23*
+
+**[REMOVED]**
+```
+(from line ~7)
+import 'routes.dart'; // Rutas de navegación
+
+```
+**[ADDED]**
+```
+7     import 'routes.dart';
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\settings\settings_page.dart
+*Saved at: 16/11/2025, 9:36:20*
+
+**[REMOVED]**
+```
+(from line ~7)
+import 
+
+```
+**[ADDED]**
+```
+7     import 'routes.dart'; // Rutas de navegación
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\settings\settings_page.dart
+*Saved at: 16/11/2025, 9:36:18*
+
+**[REMOVED]**
+```
+(from line ~7)
+import 'ro'
+
+```
+**[ADDED]**
+```
+7     import 
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\settings\settings_page.dart
+*Saved at: 16/11/2025, 9:36:12*
+
+**[REMOVED]**
+```
+(from line ~7)
+import 'r'
+
+```
+**[ADDED]**
+```
+7     import 'ro'
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\settings\settings_page.dart
+*Saved at: 16/11/2025, 9:36:10*
+
+**[REMOVED]**
+```
+(from line ~7)
+import ''
+
+```
+**[ADDED]**
+```
+7     import 'r'
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\settings\settings_page.dart
+*Saved at: 16/11/2025, 9:36:09*
+
+**[REMOVED]**
+```
+(from line ~7)
+import 
+
+```
+**[ADDED]**
+```
+7     import ''
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\settings\settings_page.dart
+*Saved at: 16/11/2025, 9:36:07*
+
+**[REMOVED]**
+```
+(from line ~7)
+import 'routes.dart';
+
+```
+**[ADDED]**
+```
+7     import 
+```
+
+---
+
 ### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\home_page.dart
 *Saved at: 8/11/2025, 0:06:50*
 

@@ -1,0 +1,65 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "citas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "id_doctor",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "fecha",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "citas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "id_doctor",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "estado",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "citas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "id_doctor",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "es_primera_cita",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "fecha_creacion",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "citas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "id_doctor",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "id_paciente",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

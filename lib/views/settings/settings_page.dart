@@ -4,12 +4,12 @@
 import 'package:flutter/material.dart';  // Material Design (BottomNavigationBar)
 import 'package:flutter/cupertino.dart'; // Widgets Cupertino (iOS-style)
 import 'package:flutter_bloc/flutter_bloc.dart'; // Manejo de estado BLoC
-import 'routes.dart';
-import 'bloc/auth/auth_bloc.dart';
-import 'bloc/auth/auth_event.dart';
-import 'bloc/auth/auth_state.dart';
-import 'bloc/user/user_bloc.dart';
-import 'bloc/user/user_state.dart';
+import '../../routes.dart';
+import '../../bloc/auth/auth_bloc.dart';
+import '../../bloc/auth/auth_event.dart';
+import '../../bloc/auth/auth_state.dart';
+import '../../bloc/user/user_bloc.dart';
+import '../../bloc/user/user_state.dart';
 
 // ============================================================================
 // SETTINGS PAGE - Pantalla de configuración con widgets Cupertino

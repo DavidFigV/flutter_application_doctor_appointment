@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'routes.dart';
-import 'bloc/auth/auth_bloc.dart';
-import 'bloc/auth/auth_event.dart';
-import 'bloc/auth/auth_state.dart';
+import '../../routes.dart';
+import '../../bloc/auth/auth_bloc.dart';
+import '../../bloc/auth/auth_event.dart';
+import '../../bloc/auth/auth_state.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -240,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            // Navegar a la página de registro
+                            Navigator.pushNamed(context, Routes.roleSelection);
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,

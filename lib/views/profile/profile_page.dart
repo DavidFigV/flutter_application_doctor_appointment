@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'bloc/auth/auth_bloc.dart';
-import 'bloc/auth/auth_state.dart';
-import 'bloc/user/user_bloc.dart';
-import 'bloc/user/user_event.dart';
-import 'bloc/user/user_state.dart';
-import 'models/user_model.dart';
+import '../../bloc/auth/auth_bloc.dart';
+import '../../bloc/auth/auth_state.dart';
+import '../../bloc/user/user_bloc.dart';
+import '../../bloc/user/user_event.dart';
+import '../../bloc/user/user_state.dart';
+import '../../repositories/user_repository.dart';
+import '../../repositories/doctor_repository.dart';
+import '../../models/user_model.dart';
+import '../../models/doctor_model.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -26,6 +29,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String? _userUid;
   String? _userEmail;
+  String? _userRole;
+  DoctorModel? _doctorData;
 
   @override
   void initState() {
@@ -33,12 +38,30 @@ class _ProfilePageState extends State<ProfilePage> {
     _loadUserData();
   }
 
-  void _loadUserData() {
+  void _loadUserData() async {
     final authState = context.read<AuthBloc>().state;
     if (authState is AuthAuthenticated) {
       _userUid = authState.user.uid;
       _userEmail = authState.user.email;
       context.read<UserBloc>().add(UserLoadRequested(authState.user.uid));
+
+      // Cargar rol del usuario
+      final userRepo = context.read<UserRepository>();
+      final role = await userRepo.getUserRole(authState.user.uid);
+
+      // Si es médico, cargar datos de doctor
+      if (role == 'medico') {
+        final doctorRepo = context.read<DoctorRepository>();
+        final doctorData = await doctorRepo.getDoctorData(authState.user.uid);
+        setState(() {
+          _userRole = role;
+          _doctorData = doctorData;
+        });
+      } else {
+        setState(() {
+          _userRole = role;
+        });
+      }
     }
   }
 
@@ -53,6 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
       uid: _userUid!,
       email: _userEmail!,
       nombre: nombreController.text.trim(),
+      fechaRegistro: DateTime.now(), // Se actualizará con la fecha real desde Firestore
       edad: edadController.text.trim().isEmpty ? null : edadController.text.trim(),
       lugarNacimiento: lugarNacimientoController.text.trim().isEmpty
           ? null
@@ -170,6 +194,89 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         const SizedBox(height: 24),
                       ],
+                    ),
+                  ),
+
+                  // Información de Rol
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: _userRole == 'medico'
+                            ? const Color(0xFF10B981).withValues(alpha: 0.1)
+                            : const Color(0xFF6366F1).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _userRole == 'medico'
+                              ? const Color(0xFF10B981)
+                              : const Color(0xFF6366F1),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                _userRole == 'medico'
+                                    ? Icons.medical_services
+                                    : Icons.person_outline,
+                                color: _userRole == 'medico'
+                                    ? const Color(0xFF10B981)
+                                    : const Color(0xFF6366F1),
+                                size: 24,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                _userRole == 'medico' ? 'Médico' : 'Paciente',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: _userRole == 'medico'
+                                      ? const Color(0xFF10B981)
+                                      : const Color(0xFF6366F1),
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (_userRole == 'medico' && _doctorData != null) ...[
+                            const SizedBox(height: 16),
+                            const Divider(),
+                            const SizedBox(height: 12),
+                            _buildDoctorInfoRow(
+                              Icons.medical_information_outlined,
+                              'Especialidad',
+                              _doctorData!.especialidad,
+                            ),
+                            if (_doctorData!.cedulaProfesional != null) ...[
+                              const SizedBox(height: 8),
+                              _buildDoctorInfoRow(
+                                Icons.badge_outlined,
+                                'Cédula Profesional',
+                                _doctorData!.cedulaProfesional!,
+                              ),
+                            ],
+                            if (_doctorData!.universidad != null) ...[
+                              const SizedBox(height: 8),
+                              _buildDoctorInfoRow(
+                                Icons.school_outlined,
+                                'Universidad',
+                                _doctorData!.universidad!,
+                              ),
+                            ],
+                            if (_doctorData!.anosExperiencia != null) ...[
+                              const SizedBox(height: 8),
+                              _buildDoctorInfoRow(
+                                Icons.work_history_outlined,
+                                'Años de Experiencia',
+                                '${_doctorData!.anosExperiencia} años',
+                              ),
+                            ],
+                          ],
+                        ],
+                      ),
                     ),
                   ),
 
@@ -402,6 +509,43 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildDoctorInfoRow(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 18,
+          color: const Color(0xFF10B981),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: const TextStyle(
+                fontSize: 14,
+                color: Color(0xFF1A1A1A),
+              ),
+              children: [
+                TextSpan(
+                  text: '$label: ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                TextSpan(
+                  text: value,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
