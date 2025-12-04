@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../routes.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({super.key});
@@ -71,6 +70,11 @@ class _MessagesPageState extends State<MessagesPage> {
     ];
   }
 
+  Future<void> _handleRefresh() async {
+    setState(() {});
+    await Future.delayed(const Duration(milliseconds: 500));
+  }
+
   @override
   Widget build(BuildContext context) {
     final conversaciones = _getConversaciones();
@@ -90,90 +94,90 @@ class _MessagesPageState extends State<MessagesPage> {
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-          // Barra de búsqueda
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search',
-                hintStyle: TextStyle(color: Colors.grey[400]),
-                prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
-                filled: true,
-                fillColor: Colors.grey[100],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        color: const Color(0xFF6366F1),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-
-          // Lista horizontal de doctores activos
-          Container(
-            color: Colors.white,
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: _doctores.length,
-              itemBuilder: (context, index) {
-                final doctor = _doctores[index];
-                return Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Stack(
+            SliverToBoxAdapter(
+              child: Container(
+                color: Colors.white,
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: _doctores.length,
+                  itemBuilder: (context, index) {
+                    final doctor = _doctores[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: const Color(0xFF6366F1),
-                            child: const Icon(
-                              Icons.person,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                          ),
-                          if (doctor['online'])
-                            Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2,
-                                  ),
+                          Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: const Color(0xFF6366F1),
+                                child: const Icon(
+                                  Icons.person,
+                                  size: 30,
+                                  color: Colors.white,
                                 ),
                               ),
-                            ),
+                              if (doctor['online'])
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    width: 16,
+                                    height: 16,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                );
-              },
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
-
-          const Divider(height: 1),
-
-          // Lista de conversaciones
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+            const SliverToBoxAdapter(child: Divider(height: 1)),
+            SliverList.separated(
               itemCount: conversaciones.length,
               separatorBuilder: (context, index) => const Divider(
                 height: 1,
@@ -247,7 +251,6 @@ class _MessagesPageState extends State<MessagesPage> {
                       ),
                     ),
                     onTap: () {
-                      // Por ahora muestra un mensaje (no funcional)
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Chat con ${doctor['nombre']} - Próximamente'),
@@ -259,34 +262,8 @@ class _MessagesPageState extends State<MessagesPage> {
                 );
               },
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, // Messages está en index 1
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pop(context);
-          } else if (index == 2) {
-            Navigator.pushNamed(context, Routes.settings);
-          }
-        },
-        selectedItemColor: const Color(0xFF6366F1),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Mensajes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Configuración',
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

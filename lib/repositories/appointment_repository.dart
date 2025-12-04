@@ -396,4 +396,52 @@ class AppointmentRepository {
       throw Exception('Error al contar citas entre doctor y paciente: $e');
     }
   }
+
+  // Validar si un paciente ya tiene cita con un doctor en un día específico
+  Future<bool> hasPacienteDoctorAppointmentOnDay(
+    String doctorId,
+    String pacienteId,
+    DateTime fecha,
+  ) async {
+    try {
+      // Consulta por doctor y paciente (sin índices compuestos de fecha)
+      final snapshot = await _firestore
+          .collection('citas')
+          .where('id_doctor', isEqualTo: doctorId)
+          .where('id_paciente', isEqualTo: pacienteId)
+          .get();
+
+      final startOfDay = DateTime(fecha.year, fecha.month, fecha.day);
+      final endOfDay = startOfDay.add(const Duration(days: 1));
+
+      return snapshot.docs.any((doc) {
+        final data = doc.data();
+        final fechaCita = (data['fecha'] as Timestamp).toDate();
+        final mismoDia = fechaCita.isAfter(startOfDay.subtract(const Duration(milliseconds: 1))) &&
+            fechaCita.isBefore(endOfDay);
+        return mismoDia;
+      });
+    } catch (e) {
+      throw Exception('Error al validar cita existente para el día: $e');
+    }
+  }
+
+  // Validar disponibilidad del doctor en una fecha y hora específicas
+  Future<bool> isDoctorSlotAvailable(
+    String doctorId,
+    DateTime fecha,
+    String hora,
+  ) async {
+    try {
+      final snapshot = await _firestore
+          .collection('citas')
+          .where('id_doctor', isEqualTo: doctorId)
+          .where('fecha', isEqualTo: fecha)
+          .where('hora', isEqualTo: hora)
+          .get();
+      return snapshot.docs.isEmpty;
+    } catch (e) {
+      throw Exception('Error al validar disponibilidad del doctor: $e');
+    }
+  }
 }

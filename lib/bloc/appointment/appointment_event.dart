@@ -18,6 +18,16 @@ class AppointmentLoadRequested extends AppointmentEvent {
   List<Object?> get props => [userId];
 }
 
+// Evento para cargar citas de un doctor (agenda)
+class AppointmentLoadForDoctorRequested extends AppointmentEvent {
+  final String doctorId;
+
+  const AppointmentLoadForDoctorRequested(this.doctorId);
+
+  @override
+  List<Object?> get props => [doctorId];
+}
+
 // Evento para crear una nueva cita
 class AppointmentCreateRequested extends AppointmentEvent {
   final AppointmentModel appointment;

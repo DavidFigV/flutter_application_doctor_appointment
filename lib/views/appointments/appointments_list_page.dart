@@ -1,7 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/appointment/appointment_bloc.dart';
+import '../../bloc/appointment/appointment_event.dart';
+import '../../bloc/appointment/appointment_state.dart';
+import '../../bloc/auth/auth_bloc.dart';
+import '../../bloc/auth/auth_state.dart';
+import '../../models/appointment_model.dart';
 import '../../routes.dart';
+import '../../repositories/user_repository.dart';
 
 class AppointmentsListPage extends StatefulWidget {
   const AppointmentsListPage({super.key});
@@ -11,47 +18,121 @@ class AppointmentsListPage extends StatefulWidget {
 }
 
 class _AppointmentsListPageState extends State<AppointmentsListPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String? _currentUserId;
+  String? _currentUserRole;
+
+  static const _months = [
+    'Ene',
+    'Feb',
+    'Mar',
+    'Abr',
+    'May',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dic',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _initLoad();
+  }
+
+  void _initLoad() {
+    final authState = context.read<AuthBloc>().state;
+    if (authState is AuthAuthenticated) {
+      _currentUserId = authState.user.uid;
+      _loadByRole();
+    }
+  }
+
+  Future<void> _loadByRole() async {
+    if (_currentUserId == null) return;
+    if (!mounted) return;
+
+    // Intentar obtener rol si no está cacheado
+    if (_currentUserRole == null) {
+      try {
+        final userRepo = context.read<UserRepository>();
+        _currentUserRole = await userRepo.getUserRole(_currentUserId!);
+      } catch (_) {
+        _currentUserRole = 'paciente';
+      }
+    }
+
+    if (_currentUserRole == 'medico') {
+      context.read<AppointmentBloc>().add(AppointmentLoadForDoctorRequested(_currentUserId!));
+    } else {
+      context.read<AppointmentBloc>().add(AppointmentLoadRequested(_currentUserId!));
+    }
+  }
 
   // ============================================================================
   // GESTO #4: RefreshIndicator - Pull-to-Refresh (método auxiliar)
   // ============================================================================
-  /// Método para refrescar el stream de citas
-  /// Aunque StreamBuilder se actualiza automáticamente, esto da control manual
   Future<void> _handleRefresh() async {
-    setState(() {}); // Forzar rebuild del widget
+    await _loadByRole();
     await Future.delayed(const Duration(milliseconds: 500));
   }
 
-  Stream<QuerySnapshot> _getAllCitasStream() {
-    final user = _auth.currentUser;
-    if (user == null) {
-      return const Stream.empty();
+  String _formatearFecha(DateTime fecha) {
+    return '${fecha.day} ${_months[fecha.month - 1]} ${fecha.year}';
+  }
+
+  Map<String, dynamic> _buildCitaDataMap(AppointmentModel cita) {
+    final data = cita.toMap();
+    data['fecha'] = Timestamp.fromDate(cita.fecha);
+    return data;
+  }
+
+  Widget _buildEstadoChip(String estado) {
+    Color color;
+    String label;
+
+    switch (estado) {
+      case 'completada':
+        color = const Color(0xFF10B981);
+        label = 'Completada';
+        break;
+      case 'cancelada':
+        color = const Color(0xFFEF4444);
+        label = 'Cancelada';
+        break;
+      default:
+        color = const Color(0xFFF59E0B);
+        label = 'Pendiente';
     }
 
-    return _firestore
-        .collection('citas')
-        .where('id_paciente', isEqualTo: user.uid)
-        .snapshots();
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
   }
 
-  String _formatearFecha(Timestamp timestamp) {
-    final fecha = timestamp.toDate();
-    final meses = [
-      'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-      'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
-    ];
-    return '${fecha.day} ${meses[fecha.month - 1]} ${fecha.year}';
-  }
+  Future<bool> _confirmAndDeleteCita(AppointmentModel cita) async {
+    if (cita.id == null) return false;
 
-  Future<void> _deleteCita(String citaId, String doctorName) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Eliminar Cita'),
-          content: Text('¿Estás seguro que deseas eliminar la cita con $doctorName?'),
+          content: Text('¿Estás seguro que deseas eliminar la cita con ${cita.nombreDoctor}?'),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -81,24 +162,15 @@ class _AppointmentsListPageState extends State<AppointmentsListPage> {
     );
 
     if (confirmed == true) {
-      try {
-        await _firestore.collection('citas').doc(citaId).delete();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Cita eliminada exitosamente'),
-              backgroundColor: Colors.green,
-            ),
-          );
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error al eliminar cita: $e')),
-          );
-        }
-      }
+      _deleteCitaById(cita.id!);
+      return true;
     }
+
+    return false;
+  }
+
+  void _deleteCitaById(String citaId) {
+    context.read<AppointmentBloc>().add(AppointmentDeleteRequested(citaId));
   }
 
   @override
@@ -118,361 +190,322 @@ class _AppointmentsListPageState extends State<AppointmentsListPage> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: RefreshIndicator(
-        onRefresh: _handleRefresh,
-        color: const Color(0xFF6366F1),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: _getAllCitasStream(),
-          builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFF6366F1),
+      body: BlocListener<AppointmentBloc, AppointmentState>(
+        listener: (context, state) {
+          if (state is AppointmentOperationSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
               ),
             );
-          }
-
-          if (snapshot.hasError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red[300],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Error al cargar citas',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
+          } else if (state is AppointmentError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
             );
           }
+        },
+        child: RefreshIndicator(
+          onRefresh: _handleRefresh,
+          color: const Color(0xFF6366F1),
+          child: BlocBuilder<AppointmentBloc, AppointmentState>(
+            builder: (context, state) {
+              if (state is AppointmentLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xFF6366F1),
+                  ),
+                );
+              }
 
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.calendar_today_outlined,
-                    size: 80,
-                    color: Colors.grey[400],
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    'No tienes citas agendadas',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Presiona el botón + para agendar una',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final citas = snapshot.data!.docs;
-
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: citas.length,
-            itemBuilder: (context, index) {
-              final citaDoc = citas[index];
-              final cita = citaDoc.data() as Map<String, dynamic>;
-              final citaId = citaDoc.id;
-
-              // ====================================================================
-              // GESTO #5: Dismissible - Swipe para Editar/Eliminar
-              // ====================================================================
-              return Dismissible(
-                key: Key(citaId),
-                // Swipe derecha: Editar (azul)
-                background: Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.edit, color: Colors.white, size: 32),
-                      SizedBox(height: 4),
-                      Text(
-                        'Editar',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Swipe izquierda: Eliminar (rojo)
-                secondaryBackground: Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.delete, color: Colors.white, size: 32),
-                      SizedBox(height: 4),
-                      Text(
-                        'Eliminar',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Confirmar antes de eliminar
-                confirmDismiss: (direction) async {
-                  if (direction == DismissDirection.endToStart) {
-                    // Swipe izquierda -> Eliminar
-                    return await showDialog<bool>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Eliminar Cita'),
-                          content: Text(
-                            '¿Estás seguro que deseas eliminar la cita con ${cita['nombre_doctor']}?',
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, false),
-                              child: const Text('Cancelar'),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, true),
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.red,
-                              ),
-                              child: const Text('Eliminar'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } else {
-                    // Swipe derecha -> Editar (no dismiss)
-                    Navigator.pushNamed(
-                      context,
-                      Routes.editAppointment,
-                      arguments: {
-                        'citaId': citaId,
-                        'citaData': cita,
-                      },
-                    );
-                    return false; // No dismissar
-                  }
-                },
-                onDismissed: (direction) async {
-                  // Solo se ejecuta si confirmDismiss retorna true (eliminar)
-                  try {
-                    await _firestore.collection('citas').doc(citaId).delete();
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Cita eliminada exitosamente'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    }
-                  } catch (e) {
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Error al eliminar: $e'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  }
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
+              if (state is AppointmentError) {
+                return Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Header con doctor y acciones
-                      Row(
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.red[300],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Error al cargar citas',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (state is! AppointmentsLoaded || state.appointments.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.calendar_today_outlined,
+                        size: 80,
+                        color: Colors.grey[400],
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'No tienes citas agendadas',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Presiona el botón + para agendar una',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              final citas = [...state.appointments]
+                ..sort((a, b) => a.fecha.compareTo(b.fecha));
+
+                      return RefreshIndicator(
+                        onRefresh: _handleRefresh,
+                        color: const Color(0xFF6366F1),
+                        child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(16),
+                          itemCount: citas.length,
+                          itemBuilder: (context, index) {
+                            final cita = citas[index];
+                  final citaId = cita.id ?? '';
+                  final isDoctor = _currentUserRole == 'medico';
+
+                  return Dismissible(
+                    key: Key(citaId),
+                    background: Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: const Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                            width: 56,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF6366F1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(
-                              Icons.person,
+                          Icon(Icons.edit, color: Colors.white, size: 32),
+                          SizedBox(height: 4),
+                          Text(
+                            'Editar',
+                            style: TextStyle(
                               color: Colors.white,
-                              size: 32,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        ],
+                      ),
+                    ),
+                    secondaryBackground: Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.delete, color: Colors.white, size: 32),
+                          SizedBox(height: 4),
+                          Text(
+                            'Eliminar',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.endToStart) {
+                        return _confirmAndDeleteCita(cita);
+                      } else {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.appointment,
+                          arguments: {
+                            'citaId': citaId,
+                            'citaData': _buildCitaDataMap(cita),
+                          },
+                        );
+                        return false;
+                      }
+                    },
+                    onDismissed: (_) {},
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 6,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                Text(
-                                  cita['nombre_doctor'] ?? 'Doctor',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1A1A1A),
+                                Container(
+                                  width: 56,
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF6366F1),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 32,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        isDoctor ? cita.nombrePaciente : cita.nombreDoctor,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1A1A1A),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        isDoctor ? cita.motivoConsulta : cita.especialidadDoctor,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[600],
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                _buildEstadoChip(cita.estado),
+                                if (!isDoctor)
+                                  IconButton(
+                                    onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.appointment,
+                                  arguments: {
+                                    'citaId': citaId,
+                                    'citaData': _buildCitaDataMap(cita),
+                                  },
+                                );
+                                    },
+                                    icon: const Icon(Icons.edit_outlined),
+                                    color: const Color(0xFF6366F1),
+                                    tooltip: 'Editar',
+                                  ),
+                                IconButton(
+                                  onPressed: () => _confirmAndDeleteCita(cita),
+                                  icon: const Icon(Icons.delete_outline),
+                                  color: Colors.red,
+                                  tooltip: 'Eliminar',
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            const Divider(height: 1),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  size: 20,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 8),
                                 Text(
-                                  cita['especialidad_doctor'] ?? 'Especialidad',
+                                  _formatearFecha(cita.fecha),
                                   style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey[600],
+                                    fontSize: 15,
+                                    color: Colors.grey[700],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Icon(
+                                  Icons.access_time,
+                                  size: 20,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  cita.hora,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey[700],
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          // Botones de acción
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.editAppointment,
-                                arguments: {
-                                  'citaId': citaId,
-                                  'citaData': cita,
-                                },
-                              );
-                            },
-                            icon: const Icon(Icons.edit_outlined),
-                            color: const Color(0xFF6366F1),
-                            tooltip: 'Editar',
-                          ),
-                          IconButton(
-                            onPressed: () => _deleteCita(
-                              citaId,
-                              cita['nombre_doctor'] ?? 'Doctor',
+                            const SizedBox(height: 12),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.description_outlined,
+                                  size: 20,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    cita.motivoConsulta,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[700],
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                            icon: const Icon(Icons.delete_outline),
-                            color: Colors.red,
-                            tooltip: 'Eliminar',
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      const Divider(height: 1),
-                      const SizedBox(height: 16),
-
-                      // Información de la cita
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.calendar_today,
-                            size: 20,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _formatearFecha(cita['fecha'] as Timestamp),
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Icon(
-                            Icons.access_time,
-                            size: 20,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            cita['hora'] ?? '',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Motivo de consulta
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.description_outlined,
-                            size: 20,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              cita['motivo_consulta'] ?? 'Sin motivo especificado',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[700],
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                ),
-              );
+                    ),
+                            );
+                          },
+                        ),
+                      );
             },
-          );
-        },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

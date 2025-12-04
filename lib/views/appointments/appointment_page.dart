@@ -22,7 +22,6 @@ class AppointmentPage extends StatefulWidget {
 
 class _AppointmentPageState extends State<AppointmentPage> {
   final _formKey = GlobalKey<FormState>();
-
   // Lista de horarios disponibles
   final List<String> _horarios = [
     '08:00 AM',
@@ -45,6 +44,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
   final TextEditingController _motivoController = TextEditingController();
 
   String? _userUid;
+  String? _appointmentId;
+  AppointmentModel? _citaExistente;
+  bool _argsCargados = false;
 
   @override
   void initState() {
@@ -52,11 +54,36 @@ class _AppointmentPageState extends State<AppointmentPage> {
     _loadUserData();
   }
 
+  void _cargarDatosSiEdicion() {
+    if (_argsCargados) return;
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    if (args == null) return;
+
+    _appointmentId = args['citaId'] as String?;
+    final citaData = args['citaData'] as Map<String, dynamic>?;
+    if (_appointmentId != null && citaData != null) {
+      _citaExistente = AppointmentModel.fromMap(citaData, docId: _appointmentId);
+      _doctorSeleccionadoUid = _citaExistente!.idDoctor;
+      _doctorSeleccionadoNombre = _citaExistente!.nombreDoctor;
+      _especialidadSeleccionada = _citaExistente!.especialidadDoctor;
+      _fechaSeleccionada = _citaExistente!.fecha;
+      _horaSeleccionada = _citaExistente!.hora;
+      _motivoController.text = _citaExistente!.motivoConsulta;
+    }
+    _argsCargados = true;
+  }
+
   void _loadUserData() {
     final authState = context.read<AuthBloc>().state;
     if (authState is AuthAuthenticated) {
       _userUid = authState.user.uid;
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cargarDatosSiEdicion();
   }
 
   Future<Map<String, String>> _loadDoctorNames(
@@ -167,6 +194,44 @@ class _AppointmentPageState extends State<AppointmentPage> {
       // Obtener datos del usuario
       final userData = await userRepo.getUserData(_userUid!);
 
+      // Validar disponibilidad del doctor en la fecha y hora seleccionadas
+      final slotDisponible = await appointmentRepo.isDoctorSlotAvailable(
+        _doctorSeleccionadoUid!,
+        _fechaSeleccionada!,
+        _horaSeleccionada!,
+      );
+
+      if (!slotDisponible) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('El doctor ya tiene una cita en esa hora. Elige otro horario.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      // Validar que el paciente no tenga ya una cita con ese doctor en el mismo día
+      final yaTieneCitaEseDia = await appointmentRepo.hasPacienteDoctorAppointmentOnDay(
+        _doctorSeleccionadoUid!,
+        _userUid!,
+        _fechaSeleccionada!,
+      );
+
+      if (yaTieneCitaEseDia) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ya tienes una cita con este doctor en ese día. Elige otra fecha.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
       // Calcular si es primera cita con este doctor
       final citasPrevias = await appointmentRepo.getTotalCitasByDoctorAndPaciente(
         _doctorSeleccionadoUid!,
@@ -174,8 +239,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
       );
       final esPrimeraCita = citasPrevias == 0;
 
-      // Crear modelo de cita
+      // Crear modelo de cita (conservar datos si es edición)
       final cita = AppointmentModel(
+        id: _appointmentId,
         idPaciente: _userUid!,
         nombrePaciente: userData.nombre,
         emailPaciente: userData.email,
@@ -186,13 +252,18 @@ class _AppointmentPageState extends State<AppointmentPage> {
         hora: _horaSeleccionada!,
         motivoConsulta: _motivoController.text.trim(),
         idDoctor: _doctorSeleccionadoUid!,
-        estado: 'pendiente',
-        fechaCreacion: DateTime.now(),
-        esPrimeraCita: esPrimeraCita,
+        estado: _citaExistente?.estado ?? 'pendiente',
+        fechaCreacion: _citaExistente?.fechaCreacion ?? DateTime.now(),
+        esPrimeraCita: _citaExistente?.esPrimeraCita ?? esPrimeraCita,
       );
 
-      // Usar BLoC para crear la cita
-      context.read<AppointmentBloc>().add(AppointmentCreateRequested(cita));
+      // Usar BLoC para crear o actualizar la cita
+      if (!mounted) return;
+      if (_appointmentId != null) {
+        context.read<AppointmentBloc>().add(AppointmentUpdateRequested(_appointmentId!, cita));
+      } else {
+        context.read<AppointmentBloc>().add(AppointmentCreateRequested(cita));
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

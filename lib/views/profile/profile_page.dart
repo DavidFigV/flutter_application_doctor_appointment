@@ -48,16 +48,19 @@ class _ProfilePageState extends State<ProfilePage> {
       // Cargar rol del usuario
       final userRepo = context.read<UserRepository>();
       final role = await userRepo.getUserRole(authState.user.uid);
+      if (!mounted) return;
 
       // Si es médico, cargar datos de doctor
       if (role == 'medico') {
         final doctorRepo = context.read<DoctorRepository>();
         final doctorData = await doctorRepo.getDoctorData(authState.user.uid);
+        if (!mounted) return;
         setState(() {
           _userRole = role;
           _doctorData = doctorData;
         });
       } else {
+        if (!mounted) return;
         setState(() {
           _userRole = role;
         });
@@ -559,4 +562,3 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 }
-

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../models/appointment_model.dart';
 import '../../repositories/appointment_repository.dart';
 import 'appointment_event.dart';
 import 'appointment_state.dart';
@@ -7,12 +8,14 @@ import 'appointment_state.dart';
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
   final AppointmentRepository _appointmentRepository;
   StreamSubscription? _appointmentSubscription;
+  List<AppointmentModel> _lastAppointments = const [];
 
   AppointmentBloc({required AppointmentRepository appointmentRepository})
       : _appointmentRepository = appointmentRepository,
         super(const AppointmentInitial()) {
     // Registrar manejadores de eventos
     on<AppointmentLoadRequested>(_onAppointmentLoadRequested);
+    on<AppointmentLoadForDoctorRequested>(_onAppointmentLoadForDoctorRequested);
     on<AppointmentCreateRequested>(_onAppointmentCreateRequested);
     on<AppointmentUpdateRequested>(_onAppointmentUpdateRequested);
     on<AppointmentDeleteRequested>(_onAppointmentDeleteRequested);
@@ -47,6 +50,31 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     }
   }
 
+  // Cargar citas del doctor (agenda)
+  Future<void> _onAppointmentLoadForDoctorRequested(
+    AppointmentLoadForDoctorRequested event,
+    Emitter<AppointmentState> emit,
+  ) async {
+    emit(const AppointmentLoading());
+
+    try {
+      await _appointmentSubscription?.cancel();
+
+      _appointmentSubscription = _appointmentRepository
+          .getAppointmentsByDoctorStream(event.doctorId)
+          .listen(
+            (appointments) {
+              add(_AppointmentUpdated(appointments));
+            },
+            onError: (error) {
+              add(_AppointmentUpdateError(error.toString()));
+            },
+          );
+    } catch (e) {
+      emit(AppointmentError(e.toString().replaceAll('Exception: ', '')));
+    }
+  }
+
   // Crear nueva cita
   Future<void> _onAppointmentCreateRequested(
     AppointmentCreateRequested event,
@@ -55,6 +83,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     try {
       await _appointmentRepository.createAppointment(event.appointment);
       emit(const AppointmentOperationSuccess('Cita creada exitosamente'));
+      emit(AppointmentsLoaded(_lastAppointments));
     } catch (e) {
       emit(AppointmentError(e.toString().replaceAll('Exception: ', '')));
     }
@@ -71,6 +100,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
         event.appointment,
       );
       emit(const AppointmentOperationSuccess('Cita actualizada exitosamente'));
+      emit(AppointmentsLoaded(_lastAppointments));
     } catch (e) {
       emit(AppointmentError(e.toString().replaceAll('Exception: ', '')));
     }
@@ -84,6 +114,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     try {
       await _appointmentRepository.deleteAppointment(event.appointmentId);
       emit(const AppointmentOperationSuccess('Cita eliminada exitosamente'));
+      emit(AppointmentsLoaded(_lastAppointments));
     } catch (e) {
       emit(AppointmentError(e.toString().replaceAll('Exception: ', '')));
     }
@@ -94,7 +125,8 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     _AppointmentUpdated event,
     Emitter<AppointmentState> emit,
   ) {
-    emit(AppointmentsLoaded(event.appointments.cast()));
+    _lastAppointments = event.appointments;
+    emit(AppointmentsLoaded(event.appointments));
   }
 
   // Manejar errores del stream
@@ -114,7 +146,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
 
 // Eventos internos para manejar actualizaciones del stream
 class _AppointmentUpdated extends AppointmentEvent {
-  final List<dynamic> appointments;
+  final List<AppointmentModel> appointments;
 
   const _AppointmentUpdated(this.appointments);
 

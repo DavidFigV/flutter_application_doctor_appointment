@@ -1,3 +1,244 @@
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.js
+*Saved at: 3/12/2025, 13:39:58*
+
+**[REMOVED]**
+```
+(from line ~23)
+  if (envPath && fs.existsSync(envPath)) reCuturn envPath;
+
+```
+**[ADDED]**
+```
+23      if (envPath && fs.existsSync(envPath)) return envPath;
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.js
+*Saved at: 3/12/2025, 13:39:56*
+
+**[REMOVED]**
+```
+(from line ~23)
+  if (envPath && fs.existsSync(envPath)) return envPath;
+
+```
+**[ADDED]**
+```
+23      if (envPath && fs.existsSync(envPath)) reCuturn envPath;
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.dart
+*Saved at: 3/12/2025, 13:22:34*
+
+**[REMOVED]**
+```
+(from line ~5)
+import "../lib/firebase_options.dart";
+
+```
+**[ADDED]**
+```
+5     import 'package:flutter_application_doctor_appointment/firebase_options.dart';
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.dart
+*Saved at: 3/12/2025, 13:22:26*
+
+**[REMOVED]**
+```
+(from line ~5)
+import '../lib/firebase_options.dart';
+
+```
+**[ADDED]**
+```
+5     import "../lib/firebase_options.dart";
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.dart
+*Saved at: 3/12/2025, 13:22:12*
+
+**[REMOVED]**
+```
+(from line ~5)
+import '';
+
+```
+**[ADDED]**
+```
+5     import '../lib/firebase_options.dart';
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.dart
+*Saved at: 3/12/2025, 13:22:10*
+
+**[REMOVED]**
+```
+(from line ~5)
+import '/lib/firebase_options.dart';
+
+```
+**[ADDED]**
+```
+5     import '';
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.dart
+*Saved at: 3/12/2025, 13:21:57*
+
+**[REMOVED]**
+```
+(from line ~5)
+import '../lib/firebase_options.dart';
+
+```
+**[ADDED]**
+```
+5     import '/lib/firebase_options.dart';
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.dart
+*Saved at: 3/12/2025, 13:19:48*
+
+**[REMOVED]**
+```
+(from line ~5)
+import 'package:flutter_application_doctor_appointment/firebase_options.dart';
+
+```
+**[ADDED]**
+```
+5     import '../lib/firebase_options.dart';
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\tool\list_users.dart
+*Saved at: 3/12/2025, 13:19:38*
+
+**[REMOVED]**
+```
+(from line ~5)
+import '../lib/firebase_options.dart';
+
+```
+**[ADDED]**
+```
+5     import 'package:flutter_application_doctor_appointment/firebase_options.dart';
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\repositories\appointment_repository.dart
+*Saved at: 3/12/2025, 10:31:49*
+
+**[REMOVED]**
+```
+(from line ~413)
+
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\repositories\appointment_repository.dart
+*Saved at: 3/12/2025, 10:31:47*
+
+**[REMOVED]**
+```
+(from line ~407)
+
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\repositories\appointment_repository.dart
+*Saved at: 3/12/2025, 10:31:45*
+
+**[REMOVED]**
+```
+(from line ~407)
+      final startOfDay = DateTime(fecha.year, fecha.month, fecha.day);
+      final endOfDay = startOfDay.add(const Duration(days: 1));
+
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\repositories\appointment_repository.dart
+*Saved at: 3/12/2025, 10:31:26*
+
+**[REMOVED]**
+```
+(from line ~413)
+          .where('fecha', isEqualTo: fe)
+
+```
+**[ADDED]**
+```
+413             .where('fecha', isEqualTo: fecha)
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\repositories\appointment_repository.dart
+*Saved at: 3/12/2025, 10:31:25*
+
+**[REMOVED]**
+```
+(from line ~413)
+          .where('fecha', isEqualTo: )
+
+```
+**[ADDED]**
+```
+413             .where('fecha', isEqualTo: fe)
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\repositories\appointment_repository.dart
+*Saved at: 3/12/2025, 10:31:20*
+
+**[REMOVED]**
+```
+(from line ~413)
+          .where('fecha', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+
+```
+**[ADDED]**
+```
+413             .where('fecha', isEqualTo: )
+```
+
+---
+
+### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\repositories\appointment_repository.dart
+*Saved at: 3/12/2025, 10:31:09*
+
+**[REMOVED]**
+```
+(from line ~414)
+          .where('fecha', isLessThan: Timestamp.fromDate(endOfDay))
+
+```
+
+---
+
 ### 📄 d:\Programing_Code\M2_Frontend_Proyects\flutter_application_doctor_appointment\lib\views\home\home_page.dart
 *Saved at: 16/11/2025, 21:00:36*
 

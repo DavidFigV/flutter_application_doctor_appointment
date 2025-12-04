@@ -13,10 +13,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  static const _primaryColor = Color(0xFF6366F1);
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6366F1),
+                            color: _primaryColor,
                             width: 2,
                           ),
                         ),
@@ -136,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6366F1),
+                            color: _primaryColor,
                             width: 2,
                           ),
                         ),
@@ -198,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                                 }
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6366F1),
+                          backgroundColor: _primaryColor,
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -250,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: const Text(
                             'Crear una cuenta',
                             style: TextStyle(
-                              color: Color(0xFF6366F1),
+                              color: _primaryColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),

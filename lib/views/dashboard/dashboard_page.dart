@@ -11,6 +11,7 @@ import '../../widgets/dashboard/pie_chart_widget.dart';
 import '../../widgets/dashboard/bar_chart_widget.dart';
 import '../../widgets/dashboard/line_chart_widget.dart';
 import '../../widgets/dashboard/dual_line_chart_widget.dart';
+import '../../widgets/dashboard/dual_point_line_chart.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -20,6 +21,11 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  static const _primaryGreen = Color(0xFF10B981);
+  static const _secondaryGreen = Color(0xFF059669);
+  static const _primaryPurple = Color(0xFF6366F1);
+  static const _secondaryPurple = Color(0xFF8B5CF6);
+
   @override
   void initState() {
     super.initState();
@@ -72,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFF10B981),
+        backgroundColor: _primaryGreen,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -88,7 +94,7 @@ class _DashboardPageState extends State<DashboardPage> {
           if (state is DashboardLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                color: Color(0xFF10B981),
+                color: _primaryGreen,
               ),
             );
           }
@@ -130,7 +136,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     icon: const Icon(Icons.refresh),
                     label: const Text('Reintentar'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF10B981),
+                      backgroundColor: _primaryGreen,
                       foregroundColor: Colors.white,
                     ),
                   ),
@@ -147,7 +153,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 _loadDashboard();
                 await Future.delayed(const Duration(seconds: 1));
               },
-              color: const Color(0xFF10B981),
+              color: _primaryGreen,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(20),
@@ -182,28 +188,35 @@ class _DashboardPageState extends State<DashboardPage> {
                     // Gráficas de tendencias
                     _buildSectionTitle('Tendencias'),
                     const SizedBox(height: 16),
-                    BarChartWidget(
-                      title: 'Citas por Mes (Últimos 6 meses)',
-                      data: stats.citasPorMes,
-                      barColor: const Color(0xFF6366F1),
-                    ),
+                  BarChartWidget(
+                    title: 'Citas por Mes (Últimos 6 meses)',
+                    data: stats.citasPorMes,
+                    barColor: _primaryPurple,
+                  ),
                     const SizedBox(height: 24),
-                    LineChartWidget(
-                      title: 'Citas por Semana (Últimas 4 semanas)',
-                      data: stats.citasPorSemana,
-                      lineColor: const Color(0xFF10B981),
-                    ),
+                  LineChartWidget(
+                    title: 'Citas por Semana (Últimas 4 semanas)',
+                    data: stats.citasPorSemana,
+                    lineColor: _primaryGreen,
+                  ),
                     const SizedBox(height: 32),
 
                     // Métricas comparativas
                     if (stats.comparativaMesActualVsAnterior != null) ...[
                       _buildSectionTitle('Análisis Comparativo'),
                       const SizedBox(height: 16),
-                      DualLineChartWidget(
+                      DualPointLineChart(
                         title: 'Mes Actual vs Mes Anterior',
-                        data: stats.comparativaMesActualVsAnterior!,
-                        lineColor1: const Color(0xFF6366F1),
-                        lineColor2: const Color(0xFF8B5CF6),
+                        valorMesAnterior:
+                            stats.comparativaMesActualVsAnterior!.datos1.first.value,
+                        valorMesActual:
+                            stats.comparativaMesActualVsAnterior!.datos1.last.value,
+                        labelMesAnterior:
+                            stats.comparativaMesActualVsAnterior!.datos1.first.label,
+                        labelMesActual:
+                            stats.comparativaMesActualVsAnterior!.datos1.last.label,
+                        lineColorAnterior: _primaryPurple,
+                        lineColorActual: _secondaryPurple,
                       ),
                       const SizedBox(height: 24),
                     ],
@@ -250,14 +263,14 @@ class _DashboardPageState extends State<DashboardPage> {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF10B981), Color(0xFF059669)],
+          colors: [_primaryGreen, _secondaryGreen],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withValues(alpha: 0.3),
+            color: _primaryGreen.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -346,7 +359,7 @@ class _DashboardPageState extends State<DashboardPage> {
             Icons.check_circle,
             'Completadas',
             '${stats.citasCompletadas}',
-            const Color(0xFF10B981),
+            _primaryGreen,
           ),
           const Divider(height: 24),
           _buildCompactMetricItem(
@@ -381,14 +394,14 @@ class _DashboardPageState extends State<DashboardPage> {
             Icons.today,
             'Por Día',
             stats.promedioCitasPorDia.toStringAsFixed(1),
-            const Color(0xFF6366F1),
+            _primaryPurple,
           ),
           const Divider(height: 24),
           _buildCompactMetricItem(
             Icons.date_range,
             'Por Semana',
             stats.promedioCitasPorSemana.toStringAsFixed(1),
-            const Color(0xFF8B5CF6),
+            _secondaryPurple,
           ),
           const Divider(height: 24),
           _buildCompactMetricItem(
@@ -468,14 +481,14 @@ class _DashboardPageState extends State<DashboardPage> {
             Icons.people,
             'Total Pacientes Únicos',
             '${stats.totalPacientesUnicos}',
-            const Color(0xFF6366F1),
+            _primaryPurple,
           ),
           const Divider(height: 24),
           _buildInfoRow(
             Icons.person_add,
             'Pacientes Nuevos (3 meses)',
             '${stats.pacientesNuevos}',
-            const Color(0xFF10B981),
+            _primaryGreen,
           ),
           if (stats.rankingEspecialidad != null) ...[
             const Divider(height: 24),

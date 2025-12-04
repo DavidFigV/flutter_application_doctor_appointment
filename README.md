@@ -1,16 +1,25 @@
 # flutter_application_doctor_appointment
 
-A new Flutter project.
+Aplicación Flutter para agendar y gestionar citas médicas con autenticación Firebase y datos en Firestore. Incluye panel de dashboard para médicos, gestión de citas para pacientes y navegación multiplataforma (web/móvil/escritorio).
 
-## Getting Started
+## Requisitos
+- Flutter 3.9.2 o superior
+- Cuenta de Firebase configurada (Auth + Firestore) y `firebase_options.dart` generado
 
-This project is a starting point for a Flutter application.
+## Ejecución
+```bash
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Estructura breve
+- `lib/main.dart`: inicialización Firebase, providers de repositorios/BLoCs y rutas.
+- `lib/repositories`: acceso a Firebase Auth y colecciones Firestore.
+- `lib/bloc`: lógica de negocio para auth, usuarios, citas y dashboard.
+- `lib/views`: pantallas de autenticación, home, citas, dashboard, perfil, ajustes.
+- `lib/widgets/dashboard`: componentes de gráficas (fl_chart).
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Pruebas
+```bash
+flutter test
+```

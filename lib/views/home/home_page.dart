@@ -14,6 +14,7 @@ import '../../bloc/appointment/appointment_state.dart';
 import '../../bloc/dashboard/dashboard_bloc.dart';
 import '../../bloc/dashboard/dashboard_event.dart';
 import '../../bloc/dashboard/dashboard_state.dart';
+import '../../models/appointment_model.dart';
 import '../../repositories/user_repository.dart';
 import '../../repositories/doctor_repository.dart';
 
@@ -25,7 +26,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  static const _headerTextColor = Color(0xFF1A1A1A);
+  static const _shadowOpacity = 0.05;
+  static const _months = [
+    'Ene',
+    'Feb',
+    'Mar',
+    'Abr',
+    'May',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dic',
+  ];
+
   String? _userRole; // Caché del rol del usuario
   bool _isLoadingRole = true; // Estado de carga del rol
 
@@ -41,7 +58,7 @@ class _HomePageState extends State<HomePage> {
     if (authState is AuthAuthenticated) {
       // Cargar datos del usuario
       context.read<UserBloc>().add(UserLoadRequested(authState.user.uid));
-      // Cargar citas del usuario
+      // Cargar citas según rol (se actualiza en _loadUserRole)
       context.read<AppointmentBloc>().add(AppointmentLoadRequested(authState.user.uid));
     }
   }
@@ -64,6 +81,11 @@ class _HomePageState extends State<HomePage> {
           final doctorData = await doctorRepo.getDoctorData(authState.user.uid);
 
           if (doctorData != null && mounted) {
+            // Cargar agenda de citas como doctor
+            context.read<AppointmentBloc>().add(
+              AppointmentLoadForDoctorRequested(authState.user.uid),
+            );
+
             context.read<DashboardBloc>().add(
               DashboardLoadRequested(
                 doctorId: authState.user.uid,
@@ -83,25 +105,7 @@ class _HomePageState extends State<HomePage> {
 
   String _formatearFecha(Timestamp timestamp) {
     final fecha = timestamp.toDate();
-    final meses = [
-      'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-      'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
-    ];
-    return '${fecha.day} ${meses[fecha.month - 1]} ${fecha.year}';
-  }
-
-  void _onBottomNavTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    if (index == 1) {
-      // Navegar a Messages
-      Navigator.pushNamed(context, Routes.messages);
-    } else if (index == 2) {
-      // Navegar a Settings
-      Navigator.pushNamed(context, Routes.settings);
-    }
+    return '${fecha.day} ${_months[fecha.month - 1]} ${fecha.year}';
   }
 
   // Construir card según rol del usuario (usa caché)
@@ -438,7 +442,7 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1A1A1A),
+                                  color: _headerTextColor,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -549,7 +553,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1A1A),
+                      color: _headerTextColor,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -577,7 +581,7 @@ class _HomePageState extends State<HomePage> {
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: _headerTextColor,
                       ),
                     ),
                     TextButton(
@@ -621,7 +625,7 @@ class _HomePageState extends State<HomePage> {
 
                     if (state is AppointmentsLoaded) {
                       // Filtrar citas según el rol
-                      List<dynamic> citasFiltradas;
+                      List<AppointmentModel> citasFiltradas;
                       if (_userRole == 'medico') {
                         // Para médicos: solo citas de hoy
                         final hoy = DateTime.now();
@@ -630,51 +634,26 @@ class _HomePageState extends State<HomePage> {
                           return fechaCita.year == hoy.year &&
                                  fechaCita.month == hoy.month &&
                                  fechaCita.day == hoy.day;
-                        }).toList();
+                        }).toList()
+                          ..sort((a, b) => a.hora.compareTo(b.hora));
                       } else {
                         // Para pacientes: próximas citas (todas)
-                        citasFiltradas = state.appointments;
+                        citasFiltradas = [...state.appointments]
+                          ..sort((a, b) {
+                            final cmpFecha = a.fecha.compareTo(b.fecha);
+                            if (cmpFecha != 0) return cmpFecha;
+                            return a.hora.compareTo(b.hora);
+                          });
                       }
 
                       if (citasFiltradas.isEmpty) {
-                        return Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.grey[300]!),
-                          ),
-                          width: double.maxFinite,
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.calendar_today_outlined,
-                                size: 48,
-                                color: Colors.grey[400],
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                _userRole == 'medico'
-                                  ? 'No tienes citas para hoy'
-                                  : 'No tienes citas agendadas',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[600],
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                _userRole == 'medico'
-                                  ? 'Disfruta tu día libre'
-                                  : 'Agenda tu primera cita para comenzar',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[500],
-                                ),
-                              ),
-                            ],
-                          ),
+                        return _buildEmptyAppointmentsState(
+                          title: _userRole == 'medico'
+                              ? 'No tienes citas para hoy'
+                              : 'No tienes citas agendadas',
+                          subtitle: _userRole == 'medico'
+                              ? 'Disfruta tu día libre'
+                              : 'Agenda tu primera cita para comenzar',
                         );
                       }
 
@@ -694,8 +673,12 @@ class _HomePageState extends State<HomePage> {
                                   _showQuickActions(context, cita.id ?? '');
                                 },
                                 child: _buildAppointmentCard(
-                                  cita.nombreDoctor,
-                                  cita.especialidadDoctor,
+                                  _userRole == 'medico'
+                                      ? cita.nombrePaciente
+                                      : cita.nombreDoctor,
+                                  _userRole == 'medico'
+                                      ? cita.motivoConsulta
+                                      : cita.especialidadDoctor,
                                   _formatearFecha(Timestamp.fromDate(cita.fecha)),
                                   cita.hora,
                                 ),
@@ -708,31 +691,8 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
 
-                    return Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[300]!),
-                      ),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.calendar_today_outlined,
-                            size: 48,
-                            color: Colors.grey[400],
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'No tienes citas agendadas',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
+                    return _buildEmptyAppointmentsState(
+                      title: 'No tienes citas agendadas',
                     );
                   },
                 ),
@@ -742,26 +702,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onBottomNavTap,
-        selectedItemColor: const Color(0xFF6366F1),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Mensajes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Configuración',
-          ),
-        ],
-      ),
+      bottomNavigationBar: null,
     );
   }
 
@@ -886,7 +827,7 @@ class _HomePageState extends State<HomePage> {
                     child: Text(
                       'Consejos Médicos',
                       style: TextStyle(
-                        color: const Color(0xFF1A1A1A),
+                        color: _headerTextColor,
                         fontSize: MediaQuery.of(context).size.width < 360 ? 16 : 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1032,6 +973,49 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildEmptyAppointmentsState({
+    required String title,
+    String? subtitle,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      width: double.maxFinite,
+      child: Column(
+        children: [
+          Icon(
+            Icons.calendar_today_outlined,
+            size: 48,
+            color: Colors.grey[400],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          if (subtitle != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   // ============================================================================
   // Quick Stat Card (para métricas rápidas en HomePage de doctores)
   // ============================================================================
@@ -1071,7 +1055,7 @@ class _HomePageState extends State<HomePage> {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1A1A1A),
+              color: _headerTextColor,
             ),
           ),
           const SizedBox(height: 2),
@@ -1128,7 +1112,7 @@ class _HomePageState extends State<HomePage> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1A1A),
+                color: _headerTextColor,
               ),
             ),
           ],
@@ -1150,8 +1134,8 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black,
-            blurRadius: 10,
+            color: Colors.black.withValues(alpha: _shadowOpacity),
+            blurRadius: 6,
             offset: const Offset(0, 2),
           ),
         ],
@@ -1181,7 +1165,7 @@ class _HomePageState extends State<HomePage> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1A1A1A),
+                    color: _headerTextColor,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -1203,7 +1187,7 @@ class _HomePageState extends State<HomePage> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1A1A),
+                  color: _headerTextColor,
                 ),
               ),
               const SizedBox(height: 4),
